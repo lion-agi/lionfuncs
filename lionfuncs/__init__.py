@@ -57,6 +57,18 @@ from .parsers.validate_keys import validate_keys
 from .parsers.validate_mapping import validate_mapping
 from .parsers.xml_parser import dict_to_xml, xml_to_dict
 
+from .utils import (
+    unique_hash,
+    insert_random_hyphens,
+    get_file_classes,
+    get_class_file_registry,
+    get_class_objects,
+    time,
+    copy,
+    run_pip_command,
+)
+
+
 __all__ = [
     "jaro_distance",
     "levenshtein_distance",
@@ -68,8 +80,8 @@ __all__ = [
     "nset",
     "to_dict",
     "to_list",
-    "to_str",
     "to_num",
+    "to_str",
     "unflatten",
     "is_homogeneous",
     "is_same_dtype",
@@ -99,6 +111,8 @@ __all__ = [
     "list_installed_packages",
     "uninstall_package",
     "update_package",
+    "LN_UNDEFINED",
+    "LionUndefinedType",
     "as_readable_json",
     "choose_most_similar",
     "extract_code_block",
@@ -107,13 +121,19 @@ __all__ = [
     "json_schema_to_cfg",
     "json_schema_to_regex",
     "function_to_schema",
-    "md_to_json",
     "extract_json_block",
+    "md_to_json",
     "validate_boolean",
     "validate_keys",
     "validate_mapping",
-    "xml_to_dict",
     "dict_to_xml",
-    "LN_UNDEFINED",
-    "LionUndefinedType",
+    "xml_to_dict",
+    "unique_hash",
+    "insert_random_hyphens",
+    "get_file_classes",
+    "get_class_file_registry",
+    "get_class_objects",
+    "time",
+    "copy",
+    "run_pip_command",
 ]
