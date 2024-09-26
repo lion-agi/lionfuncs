@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lionfuncs"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["OceanLi <122793010+ohdearquant@users.noreply.github.com>"]
 readme = "README.md"
