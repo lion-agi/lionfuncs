@@ -24,7 +24,9 @@ def clear_path(
     """
     path = Path(path)
     if not path.exists():
-        raise FileNotFoundError(f"The specified directory {path} does not exist.")
+        raise FileNotFoundError(
+            f"The specified directory {path} does not exist."
+        )
 
     exclude = exclude or []
     exclude_pattern = re.compile("|".join(exclude)) if exclude else None

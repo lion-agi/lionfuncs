@@ -64,7 +64,9 @@ class XMLParser:
         """Parse a single XML element and its children."""
         self._skip_whitespace()
         if self.xml_string[self.index] != "<":
-            raise ValueError(f"Expected '<', found '{self.xml_string[self.index]}'")
+            raise ValueError(
+                f"Expected '<', found '{self.xml_string[self.index]}'"
+            )
 
         tag, attributes = self._parse_opening_tag()
         children: dict[str, str | list | dict] = {}
@@ -75,7 +77,9 @@ class XMLParser:
             if self.xml_string.startswith("</", self.index):
                 closing_tag = self._parse_closing_tag()
                 if closing_tag != tag:
-                    raise ValueError(f"Mismatched tags: '{tag}' and '{closing_tag}'")
+                    raise ValueError(
+                        f"Mismatched tags: '{tag}' and '{closing_tag}'"
+                    )
                 break
             elif self.xml_string.startswith("<", self.index):
                 child = self._parse_element()
@@ -123,7 +127,10 @@ class XMLParser:
     def _parse_text(self) -> str:
         """Parse text content between XML tags."""
         start = self.index
-        while self.index < len(self.xml_string) and self.xml_string[self.index] != "<":
+        while (
+            self.index < len(self.xml_string)
+            and self.xml_string[self.index] != "<"
+        ):
             self.index += 1
         return self.xml_string[start : self.index]  # noqa
 

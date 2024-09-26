@@ -108,7 +108,8 @@ async def pcall(
                     return index, result
             except asyncio.TimeoutError as e:
                 raise asyncio.TimeoutError(
-                    f"{error_msg or ''} Timeout {retry_timeout} seconds " "exceeded"
+                    f"{error_msg or ''} Timeout {retry_timeout} seconds "
+                    "exceeded"
                 ) from e
             except Exception as e:
                 if error_map and type(e) in error_map:
@@ -138,7 +139,9 @@ async def pcall(
         results.append(result)
         await asyncio.sleep(throttle_delay)
 
-    results.sort(key=lambda x: x[0])  # Sort results based on the original index
+    results.sort(
+        key=lambda x: x[0]
+    )  # Sort results based on the original index
 
     if retry_timing:
         return [(result[1], result[2]) for result in results]

@@ -85,7 +85,9 @@ async def tcall(
         return (result, duration) if retry_timing else result
 
     except asyncio.TimeoutError as e:
-        error_msg = f"{error_msg or ''} Timeout {retry_timeout} seconds exceeded"
+        error_msg = (
+            f"{error_msg or ''} Timeout {retry_timeout} seconds exceeded"
+        )
         if suppress_err:
             duration = asyncio.get_event_loop().time() - start
             return (retry_default, duration) if retry_timing else retry_default

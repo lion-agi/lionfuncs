@@ -98,7 +98,9 @@ def to_dict(
     if use_model_dump and hasattr(input_, "model_dump"):
         return input_.model_dump(**kwargs)
 
-    if isinstance(input_, type(None) | LionUndefinedType | PydanticUndefinedType):
+    if isinstance(
+        input_, type(None) | LionUndefinedType | PydanticUndefinedType
+    ):
         return _undefined_to_dict(input_)
     if isinstance(input_, Mapping):
         return _mapping_to_dict(input_)

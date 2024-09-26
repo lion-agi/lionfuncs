@@ -65,9 +65,9 @@ def test_to_num_complex(input_str, expected):
     ],
 )
 def test_to_num_precision(input_str, precision, expected):
-    assert to_num(input_str, num_type=float, precision=precision) == pytest.approx(
-        expected
-    )
+    assert to_num(
+        input_str, num_type=float, precision=precision
+    ) == pytest.approx(expected)
 
 
 @pytest.mark.parametrize(

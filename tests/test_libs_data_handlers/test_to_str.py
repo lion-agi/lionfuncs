@@ -48,7 +48,10 @@ def test_primitive_types(input_value, expected):
     ],
 )
 def test_string_input(input_value, strip_lower_flag, chars, expected):
-    assert to_str(input_value, strip_lower=strip_lower_flag, chars=chars) == expected
+    assert (
+        to_str(input_value, strip_lower=strip_lower_flag, chars=chars)
+        == expected
+    )
 
 
 @pytest.mark.parametrize(

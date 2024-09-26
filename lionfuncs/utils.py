@@ -80,7 +80,9 @@ def get_class_file_registry(folder_path, pattern_list):
         for file in files:
             if file.endswith(".py"):
                 if any(pattern in root for pattern in pattern_list):
-                    class_file_dict = get_file_classes(os.path.join(root, file))
+                    class_file_dict = get_file_classes(
+                        os.path.join(root, file)
+                    )
                     class_file_registry.update(class_file_dict)
     return class_file_registry
 
@@ -143,11 +145,15 @@ def time(
 
         case "custom":
             if not custom_format:
-                raise ValueError("custom_format must be provided when type_='custom'")
+                raise ValueError(
+                    "custom_format must be provided when type_='custom'"
+                )
             formatted_time = now.strftime(custom_format)
             if custom_sep is not None:
                 for old_sep in ("-", ":", "."):
-                    formatted_time = formatted_time.replace(old_sep, custom_sep)
+                    formatted_time = formatted_time.replace(
+                        old_sep, custom_sep
+                    )
             return formatted_time
 
         case _:

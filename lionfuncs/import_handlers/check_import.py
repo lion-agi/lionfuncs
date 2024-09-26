@@ -41,7 +41,9 @@ def check_import(
                     pip_name=pip_name,
                 )
             except ImportError as e:
-                raise ValueError(f"Failed to install {package_name}: {e}") from e
+                raise ValueError(
+                    f"Failed to install {package_name}: {e}"
+                ) from e
         else:
             logging.info(
                 f"Package {package_name} not found. {error_message}",

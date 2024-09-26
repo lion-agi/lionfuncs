@@ -73,14 +73,18 @@ class TestBCallFunction(unittest.IsolatedAsyncioTestCase):
     async def test_bcall_with_max_concurrent(self):
         inputs = [1, 2, 3, 4, 5]
         batches = []
-        async for batch in bcall(inputs, async_func, batch_size=2, max_concurrent=1):
+        async for batch in bcall(
+            inputs, async_func, batch_size=2, max_concurrent=1
+        ):
             batches.append(batch)
         self.assertEqual(batches, [[2, 4], [6, 8], [10]])
 
     async def test_bcall_with_throttle_period(self):
         inputs = [1, 2, 3, 4, 5]
         batches = []
-        async for batch in bcall(inputs, async_func, batch_size=2, throttle_period=0.2):
+        async for batch in bcall(
+            inputs, async_func, batch_size=2, throttle_period=0.2
+        ):
             batches.append(batch)
         self.assertEqual(batches, [[2, 4], [6, 8], [10]])
 
@@ -102,7 +106,9 @@ class TestBCallFunction(unittest.IsolatedAsyncioTestCase):
 
         inputs = [1, 2, 3, 4, 5]
         batches = []
-        async for batch in bcall(inputs, async_func_with_kwargs, batch_size=2, add=10):
+        async for batch in bcall(
+            inputs, async_func_with_kwargs, batch_size=2, add=10
+        ):
             batches.append(batch)
         self.assertEqual(batches, [[11, 12], [13, 14], [15]])
 

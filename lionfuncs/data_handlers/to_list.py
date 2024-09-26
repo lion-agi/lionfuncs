@@ -10,7 +10,9 @@ T = TypeVar("T")
 
 
 @overload
-def to_list(input_: None | LionUndefinedType | PydanticUndefinedType, /) -> list: ...
+def to_list(
+    input_: None | LionUndefinedType | PydanticUndefinedType, /
+) -> list: ...
 
 
 @overload
@@ -117,7 +119,9 @@ def _to_list_type(input_: Any, /, use_values: bool = False) -> Any | None:
     if isinstance(input_, list):
         return input_
 
-    if isinstance(input_, type(None) | LionUndefinedType | PydanticUndefinedType):
+    if isinstance(
+        input_, type(None) | LionUndefinedType | PydanticUndefinedType
+    ):
         return _undefined_to_list(input_)
 
     if isinstance(input_, str | bytes | bytearray):

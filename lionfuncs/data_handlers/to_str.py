@@ -56,7 +56,9 @@ def _to_str_type(input_: Any, /) -> str:
     if input_ in [set(), [], {}]:
         return ""
 
-    if isinstance(input_, type(None) | LionUndefinedType | PydanticUndefinedType):
+    if isinstance(
+        input_, type(None) | LionUndefinedType | PydanticUndefinedType
+    ):
         return ""
 
     if isinstance(input_, bytes | bytearray):
@@ -72,7 +74,8 @@ def _to_str_type(input_: Any, /) -> str:
         return str(input_)
     except Exception as e:
         raise ValueError(
-            f"Could not convert input of type <{type(input_).__name__}> " "to string"
+            f"Could not convert input of type <{type(input_).__name__}> "
+            "to string"
         ) from e
 
 

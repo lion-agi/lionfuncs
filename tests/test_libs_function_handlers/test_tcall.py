@@ -99,7 +99,9 @@ async def test_tcall_with_timeout():
 
 @pytest.mark.asyncio
 async def test_tcall_with_suppress_err():
-    result = await tcall(async_func_with_error, 3, suppress_err=True, retry_default=0)
+    result = await tcall(
+        async_func_with_error, 3, suppress_err=True, retry_default=0
+    )
     assert result == 0
 
 

@@ -89,7 +89,9 @@ async def rcall(
                     **kwargs,
                 )
                 return result
-            err_msg = f"Attempt {attempt + 1}/{num_retries + 1}: {error_msg or ''}"
+            err_msg = (
+                f"Attempt {attempt + 1}/{num_retries + 1}: {error_msg or ''}"
+            )
             if retry_timing:
                 result, duration = await _rcall(
                     func,
@@ -168,7 +170,9 @@ async def _rcall(
         duration = _t() - start_time
         return (result, duration) if retry_timing else result
     except asyncio.TimeoutError as e:
-        error_msg = f"{error_msg or ''} Timeout {retry_timeout} seconds exceeded"
+        error_msg = (
+            f"{error_msg or ''} Timeout {retry_timeout} seconds exceeded"
+        )
         if ignore_err:
             duration = _t() - start_time
             return (retry_default, duration) if retry_timing else retry_default

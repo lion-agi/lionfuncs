@@ -82,7 +82,9 @@ def max_concurrent(
     return wrapper
 
 
-def throttle(func: Callable[..., T], period: float) -> Callable[..., Callable[..., T]]:
+def throttle(
+    func: Callable[..., T], period: float
+) -> Callable[..., Callable[..., T]]:
     """
     Throttle function execution to limit the rate of calls.
 

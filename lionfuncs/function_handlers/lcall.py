@@ -50,7 +50,9 @@ def lcall(
     """
     lst = to_list(input_)
     if len(to_list(func, flatten=True, dropna=True)) != 1:
-        raise ValueError("There must be one and only one function for list calling.")
+        raise ValueError(
+            "There must be one and only one function for list calling."
+        )
     return to_list(
         [func(i, **kwargs) for i in lst],
         flatten=flatten,
@@ -153,7 +155,8 @@ async def alcall(
                     return index, result
             except asyncio.TimeoutError as e:
                 raise asyncio.TimeoutError(
-                    f"{error_msg or ''} Timeout {retry_timeout} seconds " "exceeded"
+                    f"{error_msg or ''} Timeout {retry_timeout} seconds "
+                    "exceeded"
                 ) from e
             except Exception as e:
                 if error_map and type(e) in error_map:
@@ -183,12 +186,16 @@ async def alcall(
         results.append(result)
         await asyncio.sleep(throttle_delay)
 
-    results.sort(key=lambda x: x[0])  # Sort results based on the original index
+    results.sort(
+        key=lambda x: x[0]
+    )  # Sort results based on the original index
 
     if retry_timing:
         if dropna:
             return [
-                (result[1], result[2]) for result in results if result[1] is not None
+                (result[1], result[2])
+                for result in results
+                if result[1] is not None
             ]
         else:
             return [(result[1], result[2]) for result in results]

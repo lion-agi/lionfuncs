@@ -21,8 +21,12 @@ def get_file_size(path: Path | str) -> int:
         if path.is_file():
             return path.stat().st_size
         elif path.is_dir():
-            return sum(f.stat().st_size for f in path.rglob("*") if f.is_file())
+            return sum(
+                f.stat().st_size for f in path.rglob("*") if f.is_file()
+            )
         else:
             raise FileNotFoundError(f"{path} does not exist.")
     except PermissionError as e:
-        raise PermissionError(f"Permission denied when accessing {path}") from e
+        raise PermissionError(
+            f"Permission denied when accessing {path}"
+        ) from e

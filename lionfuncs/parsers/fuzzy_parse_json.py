@@ -2,7 +2,9 @@ from json import loads
 from typing import Any
 
 
-def fuzzy_parse_json(str_to_parse: str, /, *, suppress=False) -> dict[str, Any]:
+def fuzzy_parse_json(
+    str_to_parse: str, /, *, suppress=False
+) -> dict[str, Any]:
     """
     Attempt to parse a JSON string, applying fixes for common issues.
 

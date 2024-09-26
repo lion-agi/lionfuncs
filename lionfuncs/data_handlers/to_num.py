@@ -77,7 +77,9 @@ def to_num(
 
     str_ = str(input_)
     if str_.startswith(("0x", "0b")):
-        raise ValueError("`to_num` does not support hexadecimal or binary formats.")
+        raise ValueError(
+            "`to_num` does not support hexadecimal or binary formats."
+        )
 
     # Map string types to actual Python types
     if isinstance(num_type, str):
@@ -136,7 +138,9 @@ def _extract_numbers(input_: str) -> list[str]:
     special_numbers = r"(?:inf|-inf|nan)"
     percentage = r"[-+]?\d+(?:\.\d*)?%"
 
-    full_pattern = r"|".join([number_regex.pattern, special_numbers, percentage])
+    full_pattern = r"|".join(
+        [number_regex.pattern, special_numbers, percentage]
+    )
     return re.findall(full_pattern, input_, re.IGNORECASE)
 
 

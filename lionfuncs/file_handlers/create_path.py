@@ -46,8 +46,14 @@ def create_path(
     ext = f".{ext}" if ext else ""
 
     if timestamp:
-        timestamp_str = datetime.now().strftime(timestamp_format or "%Y%m%d%H%M%S")
-        name = f"{timestamp_str}_{name}" if time_prefix else f"{name}_{timestamp_str}"
+        timestamp_str = datetime.now().strftime(
+            timestamp_format or "%Y%m%d%H%M%S"
+        )
+        name = (
+            f"{timestamp_str}_{name}"
+            if time_prefix
+            else f"{name}_{timestamp_str}"
+        )
 
     if random_hash_digits > 0:
         random_hash = "-" + unique_hash(random_hash_digits)

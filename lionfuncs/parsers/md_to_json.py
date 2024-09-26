@@ -52,7 +52,8 @@ def md_to_json(
             if suppress:
                 return None
             raise ValueError(
-                "Missing expected keys in JSON object: " f"{', '.join(missing_keys)}"
+                "Missing expected keys in JSON object: "
+                f"{', '.join(missing_keys)}"
             )
 
     return json_obj
@@ -133,12 +134,16 @@ def extract_json_block(
         code_str = match.group(1).strip()
     else:
         str_to_parse = str_to_parse.strip()
-        if str_to_parse.startswith("```json\n") and str_to_parse.endswith("\n```"):
+        if str_to_parse.startswith("```json\n") and str_to_parse.endswith(
+            "\n```"
+        ):
             code_str = str_to_parse[8:-4].strip()
         else:
             if suppress:
                 return None
-            raise ValueError("No JSON code block found in the Markdown content.")
+            raise ValueError(
+                "No JSON code block found in the Markdown content."
+            )
 
     parser = parser or fuzzy_parse_json
     return parser(code_str)

@@ -142,7 +142,9 @@ def json_schema_to_cfg(
                 for prop, prop_schema in properties.items():
                     prop_symbol = generate_symbol(prop)
                     value_symbol = generate_symbol("VALUE")
-                    productions.append((prop_symbol, [f'"{prop}"', ":", value_symbol]))
+                    productions.append(
+                        (prop_symbol, [f'"{prop}"', ":", value_symbol])
+                    )
                     generate_rules(prop_schema, value_symbol)
             else:
                 productions.append((symbol, ["{", "}"]))
@@ -154,7 +156,9 @@ def json_schema_to_cfg(
             productions.append((symbol, ["[", "]"]))
             productions.append((symbol, ["[", items_symbol, "]"]))
             productions.append((items_symbol, [value_symbol]))
-            productions.append((items_symbol, [value_symbol, ",", items_symbol]))
+            productions.append(
+                (items_symbol, [value_symbol, ",", items_symbol])
+            )
             generate_rules(items, value_symbol)
 
         elif s.get("type") == "string":

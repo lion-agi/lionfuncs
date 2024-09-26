@@ -140,7 +140,9 @@ class CallDecorator:
                     try:
                         value = await ucall(function, value)
                     except Exception as e:
-                        raise ValueError(f"Error in function {function.__name__}: {e}")
+                        raise ValueError(
+                            f"Error in function {function.__name__}: {e}"
+                        )
                 return value
 
             return async_wrapper
@@ -199,7 +201,9 @@ class CallDecorator:
                     if preprocess
                     else kwargs
                 )
-                result = await ucall(func, *preprocessed_args, **preprocessed_kwargs)
+                result = await ucall(
+                    func, *preprocessed_args, **preprocessed_kwargs
+                )
 
                 return (
                     await ucall(

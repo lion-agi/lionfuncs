@@ -30,4 +30,6 @@ def as_readable_json(input_: Any, /, **kwargs) -> str:
         return json.dumps(dict_, indent=4)
 
     except Exception as e:
-        raise ValueError(f"Could not convert given input to readable dict: {e}") from e
+        raise ValueError(
+            f"Could not convert given input to readable dict: {e}"
+        ) from e

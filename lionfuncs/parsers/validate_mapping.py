@@ -93,6 +93,8 @@ def validate_mapping(
                 fuzzy_match=fuzzy_match,
             )
         except Exception as e:
-            raise ValueError(f"Failed to force_validate_dict for input: {d_}") from e
+            raise ValueError(
+                f"Failed to force_validate_dict for input: {d_}"
+            ) from e
 
     raise ValueError(f"Failed to force_validate_dict for input: {d_}")

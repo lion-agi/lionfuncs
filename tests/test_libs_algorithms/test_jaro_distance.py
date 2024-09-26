@@ -1,6 +1,9 @@
 import pytest
 
-from lionfuncs.algorithms.jaro_distance import jaro_distance, jaro_winkler_similarity
+from lionfuncs.algorithms.jaro_distance import (
+    jaro_distance,
+    jaro_winkler_similarity,
+)
 
 
 @pytest.mark.parametrize(
@@ -34,7 +37,9 @@ def test_jaro_distance(s1, s2, expected):
 )
 def test_jaro_winkler_similarity(s1, s2, expected, scaling):
     assert (
-        pytest.approx(jaro_winkler_similarity(s1, s2, scaling=scaling), abs=1e-4)
+        pytest.approx(
+            jaro_winkler_similarity(s1, s2, scaling=scaling), abs=1e-4
+        )
         == expected
     )
 

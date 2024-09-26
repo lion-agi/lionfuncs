@@ -1,7 +1,9 @@
 from pathlib import Path
 
 
-def list_files(dir_path: Path | str, extension: str | None = None) -> list[Path]:
+def list_files(
+    dir_path: Path | str, extension: str | None = None
+) -> list[Path]:
     """
     List all files in a specified directory with an optional extension
     filter, including files in subdirectories.

@@ -43,7 +43,9 @@ class TestLCallFunction(unittest.IsolatedAsyncioTestCase):
     async def test_lcall_with_error_handling(self):
         inputs = [1, 2, 3]
         error_map = {ValueError: mock_handler}
-        results = await alcall(inputs, mock_func_with_error, error_map=error_map)
+        results = await alcall(
+            inputs, mock_func_with_error, error_map=error_map
+        )
         self.assertEqual(results, [1, 2, "handled: mock error"])
 
     async def test_lcall_with_max_concurrent(self):

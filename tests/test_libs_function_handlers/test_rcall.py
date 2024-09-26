@@ -37,7 +37,9 @@ class TestRCallFunction(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result, 2)
 
     async def test_rcall_with_retries(self):
-        result = await rcall(async_func_with_error, 3, num_retries=1, retry_default=0)
+        result = await rcall(
+            async_func_with_error, 3, num_retries=1, retry_default=0
+        )
         self.assertEqual(result, 0)
 
     async def test_rcall_with_timeout(self):
@@ -91,7 +93,9 @@ class TestRCallFunction(unittest.IsolatedAsyncioTestCase):
                 verbose_retry=True,
                 retry_default=0,
             )
-            mock_print.assert_any_call("Attempt 1/2 failed: mock error, retrying...")
+            mock_print.assert_any_call(
+                "Attempt 1/2 failed: mock error, retrying..."
+            )
 
 
 if __name__ == "__main__":

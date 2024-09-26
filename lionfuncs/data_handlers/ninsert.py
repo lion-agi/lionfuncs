@@ -55,7 +55,9 @@ def ninsert(
                 nested_structure[part], (dict, list)
             ):
                 next_part = indices[i + 1]
-                nested_structure[part] = [] if isinstance(next_part, int) else {}
+                nested_structure[part] = (
+                    [] if isinstance(next_part, int) else {}
+                )
         elif isinstance(nested_structure, dict):
             if part is None:
                 raise TypeError("Cannot use NoneType as a key in a dictionary")
@@ -66,7 +68,9 @@ def ninsert(
                 )
             if part not in nested_structure:
                 next_part = indices[i + 1]
-                nested_structure[part] = [] if isinstance(next_part, int) else {}
+                nested_structure[part] = (
+                    [] if isinstance(next_part, int) else {}
+                )
         else:
             raise TypeError(
                 f"Invalid container type: {type(nested_structure)} "

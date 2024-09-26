@@ -25,7 +25,9 @@ def import_module(
 
         if import_name:
             import_name = (
-                [import_name] if not isinstance(import_name, list) else import_name
+                [import_name]
+                if not isinstance(import_name, list)
+                else import_name
             )
             a = __import__(
                 full_import_path,
@@ -38,4 +40,6 @@ def import_module(
             return __import__(full_import_path)
 
     except ImportError as e:
-        raise ImportError(f"Failed to import module {full_import_path}: {e}") from e
+        raise ImportError(
+            f"Failed to import module {full_import_path}: {e}"
+        ) from e

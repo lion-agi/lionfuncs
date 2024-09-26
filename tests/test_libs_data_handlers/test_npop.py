@@ -52,7 +52,9 @@ def test_npop_various_scenarios(data, indices, expected_result, expected_data):
         ),
     ],
 )
-def test_npop_with_default(data, indices, default, expected_result, expected_data):
+def test_npop_with_default(
+    data, indices, default, expected_result, expected_data
+):
     if default == LN_UNDEFINED:
         with pytest.raises(KeyError):
             npop(data, indices, default=default)
