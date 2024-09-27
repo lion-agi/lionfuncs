@@ -40,6 +40,7 @@ from .import_handlers.is_import_installed import is_import_installed
 from .import_handlers.list_installed_packages import list_installed_packages
 from .import_handlers.uninstall_package import uninstall_package
 from .import_handlers.update_package import update_package
+from .integrations.pandas_.to_df import to_df
 from .ln_undefined import LN_UNDEFINED, LionUndefinedType
 from .parsers.as_readable_json import as_readable_json
 from .parsers.choose_most_similar import choose_most_similar
@@ -80,6 +81,7 @@ __all__ = [
     "to_list",
     "to_num",
     "to_str",
+    "to_df",
     "unflatten",
     "is_homogeneous",
     "is_same_dtype",

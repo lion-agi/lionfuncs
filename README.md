@@ -11,4 +11,3 @@ To install `lionfuncs`, use the following command:
 ```bash
 pip install lionfuncs
 ```
-
