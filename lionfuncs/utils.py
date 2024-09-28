@@ -195,3 +195,27 @@ def run_pip_command(
         check=True,
         capture_output=True,
     )
+
+
+def format_deprecation_msg(
+    deprecated_name: str,
+    type_: str,
+    deprecated_version: str,
+    removal_version: str,
+    replacement: str | Literal["python"] | None = None,
+    additional_msg: str | None = None,
+) -> None:
+
+    msg = (
+        f"{type_}: <{deprecated_name}> is deprecated since "
+        f"<{deprecated_version}> and will be removed in {removal_version}."
+    )
+    if replacement is None:
+        msg += " No replacement is available."
+    elif replacement == "python":
+        msg += " Use the Python standard library instead."
+    elif replacement:
+        msg += f" Use <{replacement}> instead."
+    if additional_msg:
+        msg += f" {additional_msg}"
+    return msg
