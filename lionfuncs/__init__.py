@@ -59,6 +59,7 @@ from .parsers.validate_mapping import validate_mapping
 from .parsers.xml_parser import dict_to_xml, xml_to_dict
 from .utils import (
     copy,
+    format_deprecation_msg,
     get_class_file_registry,
     get_class_objects,
     get_file_classes,
@@ -83,6 +84,7 @@ __all__ = [
     "to_str",
     "to_df",
     "unflatten",
+    "format_deprecation_msg",
     "is_homogeneous",
     "is_same_dtype",
     "is_structure_homogeneous",
