@@ -20,6 +20,7 @@ from .file_handlers.clear_path import clear_path
 from .file_handlers.copy_file import copy_file
 from .file_handlers.create_path import create_path
 from .file_handlers.get_file_size import get_file_size
+from .file_handlers.is_valid_path import is_valid_path
 from .file_handlers.list_files import list_files
 from .file_handlers.read_file import read_file
 from .file_handlers.save_to_file import save_to_file
@@ -125,6 +126,7 @@ __all__ = [
     "function_to_schema",
     "extract_json_block",
     "md_to_json",
+    "is_valid_path",
     "validate_boolean",
     "validate_keys",
     "validate_mapping",
