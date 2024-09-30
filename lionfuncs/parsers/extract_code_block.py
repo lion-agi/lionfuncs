@@ -1,43 +1,63 @@
-"""Provide utility for extracting code blocks from Markdown-formatted text."""
+import re
+from typing import List, Optional, Union, Dict
 
 
-def extract_code_block(str_to_parse: str) -> str:
+def extract_code_block(
+    str_to_parse: str,
+    return_as_list: bool = False,
+    languages: Optional[List[str]] = None,
+    categorize: bool = False,
+) -> Union[str, List[str], Dict[str, List[str]]]:
     """
-    Extract code blocks from a given string containing Markdown code blocks.
+    Extract code blocks from a given string containing Markdown-formatted text.
 
-    This function identifies code blocks enclosed by triple backticks (```)
-    and extracts their content. It handles multiple code blocks and
-    concatenates them with two newlines between each block.
+    This function identifies code blocks enclosed by triple backticks (```) or
+    tildes (~~~), extracts their content, and can filter them based on specified
+    programming languages. It provides options to return the extracted code
+    blocks as a single concatenated string, a list, or a dictionary categorized
+    by language.
 
     Args:
         str_to_parse: The input string containing Markdown code blocks.
+        return_as_list: If True, returns a list of code blocks; otherwise, returns
+            them as a single concatenated string separated by two newlines.
+        languages: A list of languages to filter the code blocks. If None,
+            extracts code blocks of all languages.
+        categorize: If True, returns a dictionary mapping languages to lists of
+            code blocks.
 
     Returns:
-        Extracted code blocks concatenated with two newlines. If no code
-        blocks are found, returns an empty string.
-
-    Example:
-        >>> text = "Some text\\n```python\\nprint('Hello')\\n```\\nMore text"
-        >>> extract_code_blocks(text)
-        "print('Hello')"
+        Depending on the parameters:
+            - A concatenated string of code blocks.
+            - A list of code blocks.
+            - A dictionary mapping languages to lists of code blocks.
     """
     code_blocks = []
-    lines = str_to_parse.split("\n")
-    inside_code_block = False
-    current_block = []
+    code_dict = {}
 
-    for line in lines:
-        if line.startswith("```"):
-            if inside_code_block:
-                code_blocks.append("\n".join(current_block))
-                current_block = []
-                inside_code_block = False
+    pattern = re.compile(
+        r"""
+        ^(?P<fence>```|~~~)[ \t]*           # Opening fence ``` or ~~~
+        (?P<lang>[\w+-]*)[ \t]*\n           # Optional language identifier
+        (?P<code>.*?)(?<=\n)                # Code content
+        ^(?P=fence)[ \t]*$                  # Closing fence matching the opening
+        """,
+        re.MULTILINE | re.DOTALL | re.VERBOSE,
+    )
+
+    for match in pattern.finditer(str_to_parse):
+        lang = match.group("lang") or "plain"
+        code = match.group("code")
+
+        if languages is None or lang in languages:
+            if categorize:
+                code_dict.setdefault(lang, []).append(code)
             else:
-                inside_code_block = True
-        elif inside_code_block:
-            current_block.append(line)
+                code_blocks.append(code)
 
-    if current_block:
-        code_blocks.append("\n".join(current_block))
-
-    return "\n\n".join(code_blocks)
+    if categorize:
+        return code_dict
+    elif return_as_list:
+        return code_blocks
+    else:
+        return "\n\n".join(code_blocks)
