@@ -159,6 +159,8 @@ def _convert_to_num(
         return float("nan")
     elif number_str.endswith("%"):
         number = float(number_str[:-1]) / 100
+        if len(number_str) > 2 and number > 1:
+            number /= 100
     elif "/" in number_str:
         numerator, denominator = map(float, number_str.split("/"))
         number = numerator / denominator

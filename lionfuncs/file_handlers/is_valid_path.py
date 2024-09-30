@@ -5,7 +5,8 @@ from pathlib import Path
 
 def is_valid_path(path_str):
     """
-    Validates whether the given path string is syntactically valid for the current operating system.
+    Validates whether the given path string is syntactically
+    valid for the current operating system.
 
     Args:
         path_str (str): The filesystem path to validate.
@@ -16,6 +17,9 @@ def is_valid_path(path_str):
     Raises:
         ValueError: If the path is invalid, with an explanation.
     """
+    if isinstance(path_str, Path):
+        path_str = str(path_str)
+
     if not isinstance(path_str, str):
         raise TypeError("Path must be a string.")
 
@@ -24,8 +28,6 @@ def is_valid_path(path_str):
 
     # Determine the current operating system
     is_windows = sys.platform.startswith("win")
-    is_unix = not is_windows  # Assuming any non-Windows OS is Unix-like
-
     if is_windows:
         # Windows-specific validation
 
@@ -73,7 +75,8 @@ def is_valid_path(path_str):
                 )
 
         # 3. Check for path length
-        # Traditional MAX_PATH is 260 characters. Modern Windows can handle longer paths with Unicode prefix.
+        # Traditional MAX_PATH is 260 characters.
+        # Modern Windows can handle longer paths with Unicode prefix.
         # Here, we'll enforce the traditional limit.
         if len(path_str) > 260:
             raise ValueError(
@@ -81,7 +84,8 @@ def is_valid_path(path_str):
             )
 
         # 4. Additional checks (optional)
-        # For example, checking if the path ends with a space or dot, which is invalid in Windows
+        # For example, checking if the path ends with
+        # a space or dot, which is invalid in Windows
         if path_str.endswith(" ") or path_str.endswith("."):
             raise ValueError(
                 "Path cannot end with a space or a dot on Windows."
@@ -93,25 +97,30 @@ def is_valid_path(path_str):
         # 1. Check for null character
         if "\0" in path_str:
             raise ValueError(
-                "Path contains a null character, which is invalid on Unix-like systems."
+                "Path contains a null character, "
+                "which is invalid on Unix-like systems."
             )
 
         # 2. Check for path length
         # Common maximum path length on Unix is 4096 characters
         if len(path_str) > 4096:
             raise ValueError(
-                "Path exceeds the maximum length of 4096 characters on Unix-like systems."
+                "Path exceeds the maximum length of 4096"
+                " characters on Unix-like systems."
             )
 
         # 3. Check for empty components (e.g., consecutive slashes)
-        # Although Unix can handle multiple slashes, you might want to enforce single separators
+        # Although Unix can handle multiple slashes,
+        # you might want to enforce single separators
         if re.search(r"//+", path_str):
             raise ValueError(
-                "Path contains consecutive slashes ('//'), which may be invalid in some contexts."
+                "Path contains consecutive slashes ('//'), "
+                "which may be invalid in some contexts."
             )
 
         # 4. Optional: Check if path starts with a valid character
-        # Typically, Unix paths start with '/', '~', or a valid character for relative paths
+        # Typically, Unix paths start with '/', '~', or a
+        # valid character for relative paths
         # This can be adjusted based on specific requirements
         if not re.match(r"^(/|~|\.|[^/])", path_str):
             raise ValueError("Path does not start with a valid character.")
