@@ -2,11 +2,9 @@ import inspect
 from collections.abc import Callable
 from typing import Literal
 
-DocstringStyle = Literal["google", "rest"]
-
 
 def extract_docstring(
-    func: Callable, style: DocstringStyle = "google"
+    func: Callable, style: Literal["google", "rest"] = "google"
 ) -> tuple[str | None, dict[str, str]]:
     """
     Extract function description and parameter descriptions from docstring.
