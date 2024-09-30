@@ -1,5 +1,5 @@
 import re
-from typing import List, Optional, Union, Dict
+from typing import Dict, List, Optional, Union
 
 
 def extract_code_block(
