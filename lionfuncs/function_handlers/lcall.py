@@ -79,6 +79,7 @@ async def alcall(
     throttle_period: float | None = None,
     flatten: bool = False,
     dropna: bool = False,
+    unique: bool = False,
     **kwargs: Any,
 ) -> list[T] | list[tuple[T, float]]:
     """Apply a function to each element of a list asynchronously with options.
@@ -169,7 +170,7 @@ async def alcall(
                 if attempts <= num_retries:
                     if verbose_retry:
                         print(
-                            f"Attempt {attempts}/{num_retries + 1} failed: {e}"
+                            f"Attempt {attempts}/{num_retries} failed: {e}"
                             ", retrying..."
                         )
                     await asyncio.sleep(current_delay)
@@ -201,5 +202,8 @@ async def alcall(
             return [(result[1], result[2]) for result in results]
     else:
         return to_list(
-            [result[1] for result in results], flatten=flatten, dropna=dropna
+            [result[1] for result in results],
+            flatten=flatten,
+            dropna=dropna,
+            unique=unique,
         )
