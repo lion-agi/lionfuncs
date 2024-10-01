@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lionfuncs"
-version = "1.0.6"
+version = "1.0.7"
 description = ""
 authors = ["OceanLi <122793010+ohdearquant@users.noreply.github.com>"]
 readme = "README.md"
@@ -16,7 +16,7 @@ target-version = ['py310']
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
-black = "^24.8.0"
+black = {extras = ["jupyter"], version = "^24.8.0"}
 flake8 = "^7.1.1"
 isort = "^5.13.2"
 pytest-asyncio = "^0.24.0"
