@@ -121,7 +121,7 @@ def to_dict(
         )
     except Exception as e:
         if suppress:
-            return None
+            return {}
         raise e
 
 
