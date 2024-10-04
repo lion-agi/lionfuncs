@@ -2,12 +2,13 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from ..utils import unique_hash
+from lionfuncs.utils import unique_hash
 
 
 def create_path(
     directory: Path | str,
     filename: str,
+    extension: str = None,
     timestamp: bool = False,
     dir_exist_ok: bool = True,
     file_exist_ok: bool = False,
@@ -40,9 +41,17 @@ def create_path(
     if "/" in filename or "\\" in filename:
         raise ValueError("Filename cannot contain directory separators.")
     directory = Path(directory)
-    name, ext = filename.rsplit(".", 1) if "." in filename else (filename, "")
+
+    name, ext = None, None
+    if "." in filename:
+        name, ext = filename.rsplit(".", 1)
+    else:
+        name = filename
+        ext = extension.strip(".").strip() if extension else None
+
     if not ext:
-        raise ValueError("Filename must contain an extension.")
+        raise ValueError("No extension provided for filename.")
+
     ext = f".{ext}" if ext else ""
 
     if timestamp:
