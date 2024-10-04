@@ -14,6 +14,7 @@ def to_df(
     drop_how: str = "all",
     drop_kwargs: dict | None = None,
     reset_index: bool = True,
+    concat_kwargs: dict | None = None,
     **kwargs,
 ) -> DataFrame:
     if not isinstance(input_, list):
@@ -35,6 +36,7 @@ def to_df(
                 drop_how=drop_how,
                 drop_kwargs=drop_kwargs,
                 reset_index=reset_index,
+                concat_kwargs=concat_kwargs or {},
                 **kwargs,
             )
         except ValueError:
@@ -45,6 +47,7 @@ def to_df(
                     drop_how=drop_how,
                     drop_kwargs=drop_kwargs,
                     reset_index=reset_index,
+                    concat_kwargs=concat_kwargs or {},
                     **kwargs,
                 )
             except ValueError:
@@ -115,6 +118,7 @@ def _list_to_df(
     drop_how: str = "all",
     drop_kwargs: dict | None = None,
     reset_index: bool = True,
+    concat_kwargs: dict | None = None,
     **kwargs,
 ) -> DataFrame:
     if not input_:
@@ -137,10 +141,12 @@ def _list_to_df(
     if drop_kwargs is None:
         drop_kwargs = {}
     try:
+        config = concat_kwargs.copy()
+        config.pop("axis", None)
         df = concat(
             input_,
             axis=1 if all(isinstance(i, Series) for i in input_) else 0,
-            **kwargs,
+            **concat_kwargs,
         )
     except Exception as e1:
         try:
@@ -148,7 +154,7 @@ def _list_to_df(
             df = input_[0]
             if len(input_) > 1:
                 for i in input_[1:]:
-                    df = concat([df, i], **kwargs)
+                    df = concat([df, i], **concat_kwargs)
         except Exception as e2:
             raise ValueError(
                 f"Error converting input_ to DataFrame: {e1}, {e2}"

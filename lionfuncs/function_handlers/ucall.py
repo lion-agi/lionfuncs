@@ -2,7 +2,11 @@ import asyncio
 from collections.abc import Callable
 from typing import Any, TypeVar
 
-from .utils import custom_error_handler, force_async, is_coroutine_func
+from lionfuncs.function_handlers.utils import (
+    custom_error_handler,
+    force_async,
+    is_coroutine_func,
+)
 
 T = TypeVar("T")
 ErrorHandler = Callable[[Exception], Any]

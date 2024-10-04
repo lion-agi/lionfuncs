@@ -1,6 +1,6 @@
 from collections.abc import Callable, Sequence
 
-from ..algorithms.jaro_distance import jaro_winkler_similarity
+from lionfuncs.algorithms.jaro_distance import jaro_winkler_similarity
 
 
 def choose_most_similar(

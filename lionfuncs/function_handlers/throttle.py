@@ -4,7 +4,7 @@ import time
 from collections.abc import Callable
 from typing import Any, TypeVar
 
-from ..utils import time as _t
+from lionfuncs.utils import time as _t
 
 T = TypeVar("T")
 

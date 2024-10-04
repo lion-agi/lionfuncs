@@ -2,8 +2,8 @@ import re
 from collections.abc import Callable
 from typing import Any
 
-from .fuzzy_parse_json import fuzzy_parse_json
-from .utils import md_json_char_map
+from lionfuncs.parsers.fuzzy_parse_json import fuzzy_parse_json
+from lionfuncs.parsers.utils import md_json_char_map
 
 
 def md_to_json(

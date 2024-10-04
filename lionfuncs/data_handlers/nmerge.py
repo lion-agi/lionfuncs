@@ -3,7 +3,7 @@ from collections.abc import Callable, Sequence
 from itertools import chain
 from typing import Any
 
-from .utils import is_homogeneous
+from lionfuncs.data_handlers.utils import is_homogeneous
 
 
 def nmerge(

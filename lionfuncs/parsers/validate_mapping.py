@@ -2,9 +2,9 @@ import re
 from collections.abc import Callable, Sequence
 from typing import Any, Literal, TypedDict
 
-from .fuzzy_parse_json import fuzzy_parse_json
-from .md_to_json import md_to_json
-from .validate_keys import validate_keys
+from lionfuncs.parsers.fuzzy_parse_json import fuzzy_parse_json
+from lionfuncs.parsers.md_to_json import md_to_json
+from lionfuncs.parsers.validate_keys import validate_keys
 
 ScoreFunc = Callable[[str, str], float]
 HandleUnmatched = Literal["ignore", "raise", "remove", "fill", "force"]

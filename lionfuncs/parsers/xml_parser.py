@@ -4,7 +4,11 @@ from xml.etree import ElementTree as ET
 
 
 def xml_to_dict(
-    xml_string: str, /, suppress=False, remove_root: bool = True
+    xml_string: str,
+    /,
+    suppress=False,
+    remove_root: bool = True,
+    root_tag: str = None,
 ) -> dict[str, Any]:
     """
     Parse an XML string into a nested dictionary structure.
@@ -26,8 +30,8 @@ def xml_to_dict(
     """
     try:
         a = XMLParser(xml_string).parse()
-        if remove_root and "root" in a:
-            a = a["root"]
+        if remove_root and (root_tag or "root") in a:
+            a = a[root_tag or "root"]
         return a
     except ValueError as e:
         if not suppress:

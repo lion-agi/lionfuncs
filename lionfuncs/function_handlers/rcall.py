@@ -2,9 +2,9 @@ import asyncio
 from collections.abc import Callable
 from typing import Any, TypeVar
 
-from ..ln_undefined import LN_UNDEFINED
-from ..utils import time as _t
-from .ucall import ucall
+from lionfuncs.function_handlers.ucall import ucall
+from lionfuncs.ln_undefined import LN_UNDEFINED
+from lionfuncs.utils import time as _t
 
 T = TypeVar("T")
 ErrorHandler = Callable[[Exception], Any]

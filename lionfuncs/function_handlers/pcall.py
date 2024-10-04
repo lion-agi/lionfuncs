@@ -2,9 +2,9 @@ import asyncio
 from collections.abc import Callable, Sequence
 from typing import Any, TypeVar
 
-from ..ln_undefined import LN_UNDEFINED
-from .ucall import ucall
-from .utils import is_coroutine_func
+from lionfuncs.function_handlers.ucall import ucall
+from lionfuncs.function_handlers.utils import is_coroutine_func
+from lionfuncs.ln_undefined import LN_UNDEFINED
 
 T = TypeVar("T")
 ErrorHandler = Callable[[Exception], Any]

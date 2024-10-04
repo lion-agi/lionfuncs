@@ -1,7 +1,7 @@
 import logging
 import subprocess
 
-from ..utils import run_pip_command
+from lionfuncs.utils import run_pip_command
 
 
 def update_package(package_name: str) -> None:

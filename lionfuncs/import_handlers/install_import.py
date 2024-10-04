@@ -1,8 +1,8 @@
 import logging
 import subprocess
 
-from ..utils import run_pip_command
-from .import_module import import_module
+from lionfuncs.import_handlers.import_module import import_module
+from lionfuncs.utils import run_pip_command
 
 
 def install_import(

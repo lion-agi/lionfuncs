@@ -1,13 +1,14 @@
 import logging
 from pathlib import Path
 
-from .create_path import create_path
+from lionfuncs.file_handlers.create_path import create_path
 
 
 def save_to_file(
     text: str,
     directory: Path | str,
     filename: str,
+    extension: str = None,
     timestamp: bool = False,
     dir_exist_ok: bool = True,
     file_exist_ok: bool = False,
@@ -43,6 +44,7 @@ def save_to_file(
         file_path = create_path(
             directory=directory,
             filename=filename,
+            extension=extension,
             timestamp=timestamp,
             dir_exist_ok=dir_exist_ok,
             file_exist_ok=file_exist_ok,

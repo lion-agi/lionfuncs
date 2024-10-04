@@ -1,12 +1,3 @@
-"""
-Jaro distance and Jaro-Winkler similarity calculation functions.
-
-This module provides functions for calculating the Jaro distance and
-Jaro-Winkler similarity between two strings. These measures are useful
-for comparing the similarity of short strings, such as names or codes.
-"""
-
-
 def jaro_distance(s: str, t: str) -> float:
     """
     Calculate the Jaro distance between two strings.

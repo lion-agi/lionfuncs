@@ -1,6 +1,6 @@
 from typing import Any, Literal
 
-from ..data_handlers.flatten import flatten
+from lionfuncs.data_handlers.flatten import flatten
 
 
 def extract_json_schema(
