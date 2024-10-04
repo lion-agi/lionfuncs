@@ -208,6 +208,7 @@ def _to_dict(
 
 def _recursive_to_dict(
     input_: Any,
+    /,
     *,
     max_depth: int,
     current_depth: int = 0,
@@ -287,6 +288,7 @@ def _recursive_to_dict(
 
 def recursive_to_dict(
     input_: Any,
+    /,
     *,
     max_depth: int = None,
     exclude_types: tuple = (),
@@ -306,7 +308,7 @@ def recursive_to_dict(
 
     return _recursive_to_dict(
         input_,
-        max_depth,
+        max_depth=max_depth,
         current_depth=0,
         recursive_custom_types=recursive_custom_types,
         exclude_types=exclude_types,
