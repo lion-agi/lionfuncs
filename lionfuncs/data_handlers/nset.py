@@ -1,8 +1,8 @@
 from collections.abc import Sequence
 from typing import Any
 
-from ..ln_undefined import LN_UNDEFINED
-from .to_list import to_list
+from lionfuncs.data_handlers.to_list import to_list
+from lionfuncs.ln_undefined import LN_UNDEFINED
 
 
 def nset(

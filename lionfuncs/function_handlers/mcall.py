@@ -2,10 +2,10 @@ import asyncio
 from collections.abc import Callable, Sequence
 from typing import Any, TypeVar
 
-from ..data_handlers.to_list import to_list
-from ..function_handlers.lcall import alcall
-from ..function_handlers.rcall import rcall
-from ..ln_undefined import LN_UNDEFINED
+from lionfuncs.data_handlers.to_list import to_list
+from lionfuncs.function_handlers.lcall import alcall
+from lionfuncs.function_handlers.rcall import rcall
+from lionfuncs.ln_undefined import LN_UNDEFINED
 
 T = TypeVar("T")
 ErrorHandler = Callable[[Exception], Any]

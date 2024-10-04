@@ -3,7 +3,7 @@
 import json
 from typing import Any
 
-from ..data_handlers.to_dict import to_dict
+from lionfuncs.data_handlers.to_dict import to_dict
 
 
 def as_readable_json(input_: Any, /, **kwargs) -> str:

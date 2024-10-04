@@ -4,7 +4,7 @@ from typing import Any, TypeVar, overload
 from pydantic import BaseModel
 from pydantic_core import PydanticUndefinedType
 
-from ..ln_undefined import LionUndefinedType
+from lionfuncs.ln_undefined import LionUndefinedType
 
 T = TypeVar("T")
 

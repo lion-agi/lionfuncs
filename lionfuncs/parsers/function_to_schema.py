@@ -1,8 +1,8 @@
 import inspect
 from typing import Any, Literal
 
-from .extract_docstring import extract_docstring
-from .utils import py_json_msp
+from lionfuncs.parsers.extract_docstring import extract_docstring
+from lionfuncs.parsers.utils import py_json_msp
 
 
 def function_to_schema(

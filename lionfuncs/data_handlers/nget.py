@@ -1,7 +1,7 @@
 from typing import Any
 
-from ..ln_undefined import LN_UNDEFINED
-from .utils import get_target_container
+from lionfuncs.data_handlers.utils import get_target_container
+from lionfuncs.ln_undefined import LN_UNDEFINED
 
 
 def nget(

@@ -1,6 +1,6 @@
 from typing import Any
 
-from .to_list import to_list
+from lionfuncs.data_handlers.to_list import to_list
 
 
 def ninsert(
