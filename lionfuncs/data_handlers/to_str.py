@@ -22,7 +22,6 @@ def _serialize_as(
     use_model_dump: bool = False,
     str_parser: Callable[[str], dict[str, Any]] | None = None,
     parser_kwargs: dict = {},
-    root_tag: str = "root",
     **kwargs: Any,
 ) -> str:
     try:
@@ -44,7 +43,7 @@ def _serialize_as(
 
         if serialize_as == "xml":
 
-            return dict_to_xml(dict_, root_tag=root_tag)
+            return dict_to_xml(dict_, **kwargs)
     except Exception as e:
         raise ValueError(
             f"Failed to serialize input of {type(input_).__name__} "
@@ -90,7 +89,6 @@ def to_str(
     use_model_dump: bool = False,
     str_parser: Callable[[str], dict[str, Any]] | None = None,
     parser_kwargs: dict = {},
-    root_tag: str = "root",
     **kwargs: Any,
 ) -> str:
     """Convert any input to its string representation.
@@ -106,7 +104,6 @@ def to_str(
         use_model_dump: Use model_dump for Pydantic models if available.
         str_parser: Custom parser function for string inputs.
         parser_kwargs: Additional keyword arguments for the parser.
-        root_tag: Root tag name for XML serialization.
         **kwargs: Additional arguments passed to json.dumps or serialization.
 
     Returns:
@@ -136,7 +133,6 @@ def to_str(
             use_model_dump=use_model_dump,
             str_parser=str_parser,
             parser_kwargs=parser_kwargs,
-            root_tag=root_tag,
             **kwargs,
         )
 
@@ -166,7 +162,6 @@ def strip_lower(
     use_model_dump: bool = False,
     str_parser: Callable[[str], dict[str, Any]] | None = None,
     parser_kwargs: dict = {},
-    root_tag: str = "root",
     **kwargs: Any,
 ) -> str:
     """
@@ -200,6 +195,5 @@ def strip_lower(
         use_model_dump=use_model_dump,
         str_parser=str_parser,
         parser_kwargs=parser_kwargs,
-        root_tag=root_tag,
         **kwargs,
     )
