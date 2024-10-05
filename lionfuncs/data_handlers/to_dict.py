@@ -38,9 +38,8 @@ def to_dict(
     suppress: bool = False,
     str_type: Literal["json", "xml"] | None = "json",
     parser: Callable[[str], dict[str, Any]] | None = None,
-    remove_root: bool = True,
     recursive: bool = False,
-    max_depth: int = None,
+    max_recursive_depth: int = None,
     exclude_types: tuple = (),
     recursive_python_only: bool = True,
     **kwargs: Any,
@@ -56,9 +55,8 @@ def to_dict(
     suppress: bool = False,
     str_type: Literal["json", "xml"] | None = "json",
     parser: Callable[[str], dict[str, Any]] | None = None,
-    remove_root: bool = True,
     recursive: bool = False,
-    max_depth: int = None,
+    max_recursive_depth: int = None,
     exclude_types: tuple = (),
     recursive_python_only: bool = True,
     **kwargs: Any,
@@ -73,9 +71,8 @@ def to_dict(
         suppress: Return empty dict on errors if True.
         str_type: Input string type ("json" or "xml").
         parser: Custom parser function for string inputs.
-        remove_root: Remove root element from XML parsing result.
         recursive: Enable recursive conversion of nested structures.
-        max_depth: Maximum recursion depth (default 5, max 10).
+        max_recursive_depth: Maximum recursion depth (default 5, max 10).
         exclude_types: Tuple of types to exclude from conversion.
         recursive_python_only: If False, attempts to convert custom types recursively.
         **kwargs: Additional arguments for parsing functions.
@@ -91,7 +88,7 @@ def to_dict(
         {'a': 1, 'b': [2, 3]}
         >>> to_dict('{"x": 10}', str_type="json")
         {'x': 10}
-        >>> to_dict({"a": {"b": {"c": 1}}}, recursive=True, max_depth=2)
+        >>> to_dict({"a": {"b": {"c": 1}}}, recursive=True, max_recursive_depth=2)
         {'a': {'b': {'c': 1}}}
     """
     try:
@@ -102,8 +99,7 @@ def to_dict(
                 fuzzy_parse=fuzzy_parse,
                 str_type=str_type,
                 parser=parser,
-                remove_root=remove_root,
-                max_depth=max_depth,
+                max_recursive_depth=max_recursive_depth,
                 exclude_types=exclude_types,
                 recursive_custom_types=not recursive_python_only,
                 **kwargs,
@@ -113,7 +109,6 @@ def to_dict(
             input_,
             fuzzy_parse=fuzzy_parse,
             parser=parser,
-            remove_root=remove_root,
             str_type=str_type,
             use_model_dump=use_model_dump,
             exclude_types=exclude_types,
@@ -133,7 +128,6 @@ def _to_dict(
     fuzzy_parse: bool = False,
     str_type: Literal["json", "xml"] | None = "json",
     parser: Callable[[str], dict[str, Any]] | None = None,
-    remove_root: bool = True,
     exclude_types: tuple = (),
     **kwargs: Any,
 ) -> dict[str, Any]:
@@ -148,7 +142,6 @@ def _to_dict(
         suppress: Return empty dict on parsing errors if True.
         str_type: Input string type, either "json" or "xml".
         parser: Custom parser function for string inputs.
-        remove_root: Remove root element from XML parsing result.
         **kwargs: Additional arguments passed to parsing functions.
 
     Returns:
@@ -190,7 +183,6 @@ def _to_dict(
                 input_,
                 str_type=str_type,
                 parser=parser,
-                remove_root=remove_root,
                 **kwargs,
             )
             if isinstance(a, dict):
@@ -210,14 +202,14 @@ def _recursive_to_dict(
     input_: Any,
     /,
     *,
-    max_depth: int,
+    max_recursive_depth: int,
     current_depth: int = 0,
     recursive_custom_types: bool = False,
     exclude_types: tuple = (),
     **kwargs: Any,
 ) -> Any:
 
-    if current_depth >= max_depth:
+    if current_depth >= max_recursive_depth:
         return input_
 
     if isinstance(input_, str):
@@ -227,7 +219,7 @@ def _recursive_to_dict(
             # Recursively process the parsed result
             return _recursive_to_dict(
                 parsed,
-                max_depth=max_depth,
+                max_recursive_depth=max_recursive_depth,
                 current_depth=current_depth + 1,
                 recursive_custom_types=recursive_custom_types,
                 exclude_types=exclude_types,
@@ -242,7 +234,7 @@ def _recursive_to_dict(
         return {
             key: _recursive_to_dict(
                 value,
-                max_depth=max_depth,
+                max_recursive_depth=max_recursive_depth,
                 current_depth=current_depth + 1,
                 recursive_custom_types=recursive_custom_types,
                 exclude_types=exclude_types,
@@ -256,7 +248,7 @@ def _recursive_to_dict(
         processed = [
             _recursive_to_dict(
                 element,
-                max_depth=max_depth,
+                max_recursive_depth=max_recursive_depth,
                 current_depth=current_depth + 1,
                 recursive_custom_types=recursive_custom_types,
                 exclude_types=exclude_types,
@@ -272,7 +264,7 @@ def _recursive_to_dict(
             obj_dict = to_dict(input_, **kwargs)
             return _recursive_to_dict(
                 obj_dict,
-                max_depth=max_depth,
+                max_recursive_depth=max_recursive_depth,
                 current_depth=current_depth + 1,
                 recursive_custom_types=recursive_custom_types,
                 exclude_types=exclude_types,
@@ -290,25 +282,29 @@ def recursive_to_dict(
     input_: Any,
     /,
     *,
-    max_depth: int = None,
+    max_recursive_depth: int = None,
     exclude_types: tuple = (),
     recursive_custom_types: bool = False,
     **kwargs: Any,
 ) -> Any:
 
-    if not isinstance(max_depth, int):
-        max_depth = 5
+    if not isinstance(max_recursive_depth, int):
+        max_recursive_depth = 5
     else:
-        if max_depth < 0:
-            raise ValueError("max_depth must be a non-negative integer")
-        if max_depth == 0:
+        if max_recursive_depth < 0:
+            raise ValueError(
+                "max_recursive_depth must be a non-negative integer"
+            )
+        if max_recursive_depth == 0:
             return input_
-        if max_depth > 10:
-            raise ValueError("max_depth must be less than or equal to 10")
+        if max_recursive_depth > 10:
+            raise ValueError(
+                "max_recursive_depth must be less than or equal to 10"
+            )
 
     return _recursive_to_dict(
         input_,
-        max_depth=max_depth,
+        max_recursive_depth=max_recursive_depth,
         current_depth=0,
         recursive_custom_types=recursive_custom_types,
         exclude_types=exclude_types,
@@ -333,7 +329,6 @@ def _str_to_dict(
     *,
     str_type: Literal["json", "xml"] | None = "json",
     parser: Callable[[str], dict[str, Any]] | None = None,
-    remove_root: bool = True,
     **kwargs: Any,
 ) -> dict[str, Any] | list[dict[str, Any]]:
     """Handle string inputs."""
@@ -355,7 +350,7 @@ def _str_to_dict(
             if parser is None:
                 from ..parsers.xml_parser import xml_to_dict
 
-                return xml_to_dict(input_, remove_root=remove_root)
+                return xml_to_dict(input_, **kwargs)
             return parser(input_, **kwargs)
         except Exception as e:
             raise ValueError("Failed to parse XML string") from e
