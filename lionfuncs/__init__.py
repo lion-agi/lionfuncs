@@ -61,6 +61,7 @@ from .parsers.xml_parser import dict_to_xml, xml_to_dict
 from .utils import (
     copy,
     format_deprecation_msg,
+    get_bins,
     get_class_file_registry,
     get_class_objects,
     get_file_classes,
@@ -71,6 +72,7 @@ from .utils import (
 )
 
 __all__ = [
+    "get_bins",
     "jaro_distance",
     "levenshtein_distance",
     "flatten",
