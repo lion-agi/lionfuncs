@@ -41,7 +41,9 @@ from .import_handlers.is_import_installed import is_import_installed
 from .import_handlers.list_installed_packages import list_installed_packages
 from .import_handlers.uninstall_package import uninstall_package
 from .import_handlers.update_package import update_package
+from .integrations.pandas_.to_csv import to_csv, to_excel
 from .integrations.pandas_.to_df import to_df
+from .integrations.pydantic_.break_down_annotation import break_down_annotation
 from .ln_undefined import LN_UNDEFINED, LionUndefinedType
 from .parsers.as_readable_json import as_readable_json
 from .parsers.choose_most_similar import choose_most_similar
@@ -57,10 +59,12 @@ from .parsers.md_to_json import extract_json_block, md_to_json
 from .parsers.validate_boolean import validate_boolean
 from .parsers.validate_keys import validate_keys
 from .parsers.validate_mapping import validate_mapping
+from .parsers.validate_str import validate_str
 from .parsers.xml_parser import dict_to_xml, xml_to_dict
 from .utils import (
     copy,
     format_deprecation_msg,
+    get_bins,
     get_class_file_registry,
     get_class_objects,
     get_file_classes,
@@ -71,6 +75,7 @@ from .utils import (
 )
 
 __all__ = [
+    "get_bins",
     "jaro_distance",
     "levenshtein_distance",
     "flatten",
@@ -140,4 +145,8 @@ __all__ = [
     "time",
     "copy",
     "run_pip_command",
+    "validate_str",
+    "break_down_annotation",
+    "to_csv",
+    "to_excel",
 ]
