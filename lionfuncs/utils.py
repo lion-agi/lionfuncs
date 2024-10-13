@@ -221,7 +221,7 @@ def format_deprecation_msg(
     return msg
 
 
-def get_bins(input_: list[str], upper: int | None = 2000) -> list[list[int]]:
+def get_bins(input_: list[str], upper: int) -> list[list[int]]:
     """Organizes indices of strings into bins based on a cumulative upper limit.
 
     Args:
