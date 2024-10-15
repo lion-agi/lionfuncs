@@ -41,9 +41,8 @@ from .import_handlers.is_import_installed import is_import_installed
 from .import_handlers.list_installed_packages import list_installed_packages
 from .import_handlers.uninstall_package import uninstall_package
 from .import_handlers.update_package import update_package
-from .integrations.pandas_.to_csv import to_csv, to_excel
-from .integrations.pandas_.to_df import to_df
-from .integrations.pydantic_.break_down_annotation import break_down_annotation
+from .integrations.pandas_ import to_csv, to_excel, to_df
+from .integrations.pydantic_ import break_down_annotation, MutableModel
 from .ln_undefined import LN_UNDEFINED, LionUndefinedType
 from .parsers.as_readable_json import as_readable_json
 from .parsers.choose_most_similar import choose_most_similar
@@ -149,4 +148,5 @@ __all__ = [
     "break_down_annotation",
     "to_csv",
     "to_excel",
+    "MutableModel",
 ]
