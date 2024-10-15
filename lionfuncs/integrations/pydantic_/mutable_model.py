@@ -209,3 +209,13 @@ class MutableModel(BaseModel):
             config[k] = (v.annotation, v)
         model_name = model_name or f"Dynamic{self.__class__.__name__}"
         return create_model(model_name, **config)
+
+    @classmethod
+    def new_model(cls, model_name: str, **kwargs) -> type[BaseModel]:
+        config = cls.model_fields
+        config.update(kwargs)
+        config.pop("extra_fields")
+        for k, v in config:
+            config[k] = (v.annotation, v)
+        model_name = model_name or f"Dynamic{cls.__name__}"
+        return create_model(model_name, **config)
