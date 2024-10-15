@@ -1,13 +1,15 @@
-from typing import Any, Annotated
+from typing import Annotated, Any
+
 from pydantic import (
     BaseModel,
     Field,
+    create_model,
     field_serializer,
     field_validator,
-    create_model,
 )
 from pydantic.fields import FieldInfo
 from pydantic_core import PydanticUndefined
+
 from lionfuncs.ln_undefined import LN_UNDEFINED
 
 NAMED_FIELD = Annotated[str, Field(..., alias="field")]
