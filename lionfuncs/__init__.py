@@ -44,6 +44,7 @@ from .import_handlers.update_package import update_package
 from .integrations.pandas_ import to_csv, to_df, to_excel
 from .integrations.pydantic_ import MutableModel, break_down_annotation
 from .ln_undefined import LN_UNDEFINED, LionUndefinedType
+from .note import Note, note
 from .parsers.as_readable_json import as_readable_json
 from .parsers.choose_most_similar import choose_most_similar
 from .parsers.extract_code_block import extract_code_block
@@ -149,4 +150,6 @@ __all__ = [
     "to_csv",
     "to_excel",
     "MutableModel",
+    "Note",
+    "note",
 ]
