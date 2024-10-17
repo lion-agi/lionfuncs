@@ -3,7 +3,7 @@ from pydantic import create_model as _create_model
 
 
 def new_model(
-    base: BaseModel,
+    base: BaseModel | type[BaseModel],
     model_name=None,
     use_all_fields=False,
     config_dict: ConfigDict = None,
@@ -12,7 +12,8 @@ def new_model(
     use_cls_kwargs=False,
     use_base_cls=False,
     **kwargs,
-):
+) -> type[BaseModel]:
+    """create new pydantic model with additional fields"""
     if use_all_fields and hasattr(base, "all_fields"):
         kwargs.update(base.all_fields)
     else:
@@ -22,7 +23,8 @@ def new_model(
     config = {}
     for k, v in kwargs.items():
         config[k] = (v.annotation, v)
-        cls_kwargs[k] = getattr(base, k)
+        if hasattr(base, k):
+            cls_kwargs[k] = getattr(base, k)
 
     if config_dict:
         config["__config__"] = config_dict
