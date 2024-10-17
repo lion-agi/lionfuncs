@@ -42,7 +42,7 @@ from .import_handlers.list_installed_packages import list_installed_packages
 from .import_handlers.uninstall_package import uninstall_package
 from .import_handlers.update_package import update_package
 from .integrations.pandas_ import to_csv, to_df, to_excel
-from .integrations.pydantic_ import MutableModel, break_down_annotation
+from .integrations.pydantic_ import new_model, break_down_annotation
 from .ln_undefined import LN_UNDEFINED, LionUndefinedType
 from .note import Note, note
 from .parsers.as_readable_json import as_readable_json
@@ -149,7 +149,7 @@ __all__ = [
     "break_down_annotation",
     "to_csv",
     "to_excel",
-    "MutableModel",
+    "new_model",
     "Note",
     "note",
 ]
