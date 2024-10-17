@@ -1,4 +1,4 @@
 from .break_down_annotation import break_down_annotation
-from .mutable_model import MutableModel
+from .new_model import new_model
 
-__all__ = ["MutableModel", "break_down_annotation"]
+__all__ = ["new_model", "break_down_annotation"]
