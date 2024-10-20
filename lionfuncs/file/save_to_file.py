@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 
-from lionfuncs.file_handlers.create_path import create_path
+from lionfuncs.file.create_path import create_path
 
 
 def save_to_file(
