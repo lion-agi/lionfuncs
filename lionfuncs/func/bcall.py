@@ -1,8 +1,8 @@
 from collections.abc import AsyncGenerator, Callable
 from typing import Any, TypeVar
 
-from lionfuncs.data_handlers.to_list import to_list
-from lionfuncs.function_handlers.lcall import alcall
+from lionfuncs.data.to_list import to_list
+from lionfuncs.func.lcall import alcall
 
 T = TypeVar("T")
 ErrorHandler = Callable[[Exception], Any]

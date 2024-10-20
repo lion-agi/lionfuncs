@@ -2,7 +2,7 @@ import asyncio
 from collections.abc import Callable
 from typing import Any, TypeVar
 
-from lionfuncs.function_handlers.utils import (
+from lionfuncs.func.utils import (
     custom_error_handler,
     force_async,
     is_coroutine_func,

@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache, wraps
 from typing import Any, TypeVar
 
-from lionfuncs.function_handlers.throttle import Throttle
+from lionfuncs.func.throttle import Throttle
 
 T = TypeVar("T")
 ErrorHandler = Callable[[Exception], Any]

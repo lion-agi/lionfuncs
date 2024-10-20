@@ -2,7 +2,7 @@ import asyncio
 from collections.abc import Callable
 from typing import Any, TypeVar
 
-from lionfuncs.function_handlers.ucall import ucall
+from lionfuncs.func.ucall import ucall
 from lionfuncs.ln_undefined import LN_UNDEFINED
 from lionfuncs.utils import time as _t
 

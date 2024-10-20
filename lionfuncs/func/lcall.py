@@ -2,8 +2,8 @@ import asyncio
 from collections.abc import Callable
 from typing import Any, TypeVar
 
-from lionfuncs.data_handlers.to_list import to_list
-from lionfuncs.function_handlers.ucall import ucall
+from lionfuncs.data.to_list import to_list
+from lionfuncs.func.ucall import ucall
 from lionfuncs.ln_undefined import LN_UNDEFINED
 
 T = TypeVar("T")

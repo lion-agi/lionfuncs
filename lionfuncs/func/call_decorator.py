@@ -3,10 +3,10 @@ from collections.abc import Callable, Sequence
 from functools import wraps
 from typing import Any, TypeVar
 
-from lionfuncs.function_handlers.rcall import rcall
-from lionfuncs.function_handlers.throttle import Throttle
-from lionfuncs.function_handlers.ucall import ucall
-from lionfuncs.function_handlers.utils import force_async, is_coroutine_func
+from lionfuncs.func.rcall import rcall
+from lionfuncs.func.throttle import Throttle
+from lionfuncs.func.ucall import ucall
+from lionfuncs.func.utils import force_async, is_coroutine_func
 from lionfuncs.ln_undefined import LN_UNDEFINED
 
 T = TypeVar("T")
