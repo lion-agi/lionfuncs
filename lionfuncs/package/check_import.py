@@ -1,8 +1,8 @@
 import logging
 
-from lionfuncs.import_handlers.import_module import import_module
-from lionfuncs.import_handlers.install_import import install_import
-from lionfuncs.import_handlers.is_import_installed import is_import_installed
+from lionfuncs.package.import_module import import_module
+from lionfuncs.package.install_import import install_import
+from lionfuncs.package.is_import_installed import is_import_installed
 
 
 def check_import(

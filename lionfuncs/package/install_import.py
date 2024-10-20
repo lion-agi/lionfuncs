@@ -1,7 +1,7 @@
 import logging
 import subprocess
 
-from lionfuncs.import_handlers.import_module import import_module
+from lionfuncs.package.import_module import import_module
 from lionfuncs.utils import run_pip_command
 
 
