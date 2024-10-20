@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from lionfuncs.function_handlers.tcall import tcall
+from lionfuncs.func.tcall import tcall
 
 
 async def async_func(x: int) -> int:

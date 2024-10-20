@@ -1,6 +1,6 @@
 import pytest
 
-from lionfuncs.data_handlers.nfilter import nfilter
+from lionfuncs.data.nfilter import nfilter
 
 
 @pytest.mark.parametrize(

@@ -1,7 +1,7 @@
 import asyncio
 import unittest
 
-from lionfuncs.function_handlers.utils import (
+from lionfuncs.func.utils import (
     force_async,
     is_coroutine_func,
     max_concurrent,

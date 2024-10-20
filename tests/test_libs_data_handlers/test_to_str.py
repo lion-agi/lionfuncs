@@ -3,7 +3,7 @@ from collections import OrderedDict, namedtuple
 import pytest
 from pydantic import BaseModel
 
-from lionfuncs.data_handlers.to_str import strip_lower, to_str
+from lionfuncs.data.to_str import strip_lower, to_str
 from lionfuncs.ln_undefined import LN_UNDEFINED, LionUndefinedType
 
 

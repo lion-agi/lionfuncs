@@ -1,22 +1,51 @@
-from typing import Any
+from typing import Any, Literal
 
 from pandas import DataFrame, Series, concat
 from pandas.core.generic import NDFrame
 
-from lionfuncs.data_handlers.to_dict import to_dict
-from lionfuncs.data_handlers.to_list import to_list
+from lionfuncs.data.to_dict import to_dict
+from lionfuncs.data.to_list import to_list
 
 
 def to_df(
     input_: Any,
     /,
     *,
-    drop_how: str = "all",
-    drop_kwargs: dict | None = None,
+    drop_how: Literal["any", "all"] = "all",
+    drop_kwargs: dict[str, Any] | None = None,
     reset_index: bool = True,
-    concat_kwargs: dict | None = None,
-    **kwargs,
+    concat_kwargs: dict[str, Any] | None = None,
+    **kwargs: Any,
 ) -> DataFrame:
+    """
+    Convert various input types to a pandas DataFrame.
+
+    This function attempts to convert the input to a DataFrame, handling
+    both single objects and lists of objects. It can process various input
+    types including dictionaries, lists, and existing pandas objects.
+
+    Args:
+        input_: The input data to convert to a DataFrame.
+        drop_how: How to drop NA values. Either "any" or "all".
+        drop_kwargs: Additional keyword arguments for dropna().
+        reset_index: Whether to reset the index of the resulting DataFrame.
+        concat_kwargs: Keyword arguments for pandas.concat() when dealing with lists.
+        **kwargs: Additional keyword arguments passed to DataFrame constructor.
+
+    Returns:
+        A pandas DataFrame created from the input data.
+
+    Raises:
+        ValueError: If the input cannot be converted to a DataFrame.
+
+    Example:
+        >>> data = [{"a": 1, "b": 2}, {"a": 3, "b": 4}]
+        >>> df = to_df(data)
+        >>> print(df)
+           a  b
+        0  1  2
+        1  3  4
+    """
     if not isinstance(input_, list):
         try:
             return general_to_df(

@@ -1,6 +1,6 @@
 import pytest
 
-from lionfuncs.data_handlers.to_num import to_num
+from lionfuncs.data.to_num import to_num
 
 
 @pytest.mark.parametrize(
