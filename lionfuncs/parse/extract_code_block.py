@@ -1,13 +1,12 @@
 import re
-from typing import Dict, List, Optional, Union
 
 
 def extract_code_block(
     str_to_parse: str,
     return_as_list: bool = False,
-    languages: Optional[List[str]] = None,
+    languages: list[str] | None = None,
     categorize: bool = False,
-) -> Union[str, List[str], Dict[str, List[str]]]:
+) -> str | list[str] | dict[str, list[str]]:
     """
     Extract code blocks from a given string containing
     Markdown-formatted text.

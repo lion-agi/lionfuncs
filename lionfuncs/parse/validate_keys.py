@@ -1,7 +1,7 @@
 from collections.abc import Callable, Sequence
 from typing import Any, Literal, TypedDict
 
-from lionfuncs.algorithms.jaro_distance import jaro_winkler_similarity
+from lionfuncs.algo.jaro_distance import jaro_winkler_similarity
 
 ScoreFunc = Callable[[str, str], float]
 HandleUnmatched = Literal["ignore", "raise", "remove", "fill", "force"]

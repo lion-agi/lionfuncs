@@ -3,7 +3,7 @@
 import json
 from typing import Any
 
-from lionfuncs.data_handlers.to_dict import to_dict
+from lionfuncs.data.to_dict import to_dict
 
 
 def as_readable_json(input_: Any, /, **kwargs) -> str:
@@ -26,7 +26,15 @@ def as_readable_json(input_: Any, /, **kwargs) -> str:
         ValueError: If the input cannot be converted to a readable dict.
     """
     try:
-        dict_ = to_dict(input_, **kwargs)
+        dict_ = to_dict(
+            input_,
+            use_model_dump=True,
+            fuzzy_parse=True,
+            recursive=True,
+            recursive_python_only=False,
+            max_recursive_depth=5,
+            **kwargs,
+        )
         return json.dumps(dict_, indent=4)
 
     except Exception as e:
