@@ -1,6 +1,36 @@
 from collections import deque
 from collections.abc import Mapping, Sequence
-from typing import Any, Literal
+from typing import Any, Literal, TypeVar, overload
+
+T = TypeVar("T")
+
+
+@overload
+def flatten(
+    nested_structure: T,
+    /,
+    *,
+    parent_key: tuple = (),
+    sep: str = "|",
+    coerce_keys: Literal[True] = True,
+    dynamic: bool = True,
+    coerce_sequence: Literal["dict", None] = None,
+    max_depth: int | None = None,
+) -> dict[str, Any] | None: ...
+
+
+@overload
+def flatten(
+    nested_structure: T,
+    /,
+    *,
+    parent_key: tuple = (),
+    sep: str = "|",
+    coerce_keys: Literal[False],
+    dynamic: bool = True,
+    coerce_sequence: Literal["dict", "list", None] = None,
+    max_depth: int | None = None,
+) -> dict[tuple, Any] | None: ...
 
 
 def flatten(

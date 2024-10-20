@@ -5,7 +5,7 @@ from typing import Any, Literal, TypeVar, overload
 from pydantic_core import PydanticUndefinedType
 
 from lionfuncs.ln_undefined import LionUndefinedType
-from lionfuncs.parsers.fuzzy_parse_json import fuzzy_parse_json
+from lionfuncs.parse.fuzzy_parse_json import fuzzy_parse_json
 
 T = TypeVar("T", bound=dict[str, Any] | list[dict[str, Any]])
 
@@ -348,7 +348,7 @@ def _str_to_dict(
     if str_type == "xml":
         try:
             if parser is None:
-                from ..parsers.xml_parser import xml_to_dict
+                from ..parse.xml_parser import xml_to_dict
 
                 return xml_to_dict(input_, **kwargs)
             return parser(input_, **kwargs)

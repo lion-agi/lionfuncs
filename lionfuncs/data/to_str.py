@@ -4,9 +4,9 @@ from typing import Any, Literal, TypeVar
 
 from pydantic_core import PydanticUndefined, PydanticUndefinedType
 
-from lionfuncs.data_handlers.to_dict import to_dict
+from lionfuncs.data.to_dict import to_dict
 from lionfuncs.ln_undefined import LN_UNDEFINED, LionUndefinedType
-from lionfuncs.parsers.xml_parser import dict_to_xml
+from lionfuncs.parse.xml_parser import dict_to_xml
 
 T = TypeVar("T")
 

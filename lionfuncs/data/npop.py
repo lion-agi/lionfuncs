@@ -1,7 +1,7 @@
 from collections.abc import Sequence
 from typing import Any
 
-from lionfuncs.data_handlers.to_list import to_list
+from lionfuncs.data.to_list import to_list
 from lionfuncs.ln_undefined import LN_UNDEFINED
 
 
