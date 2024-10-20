@@ -44,3 +44,9 @@ def levenshtein_distance(a: str, b: str) -> int:
         )
 
     return d[m][n]
+
+
+def levenshtein_similarity(s1: str, s2: str) -> float:
+    distance = levenshtein_distance(s1, s2)
+    max_len = max(len(s1), len(s2))
+    return 1 - (distance / max_len)
