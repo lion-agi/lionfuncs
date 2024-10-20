@@ -1,6 +1,6 @@
 import pytest
 
-from lionfuncs.algorithms.levenshtein_distance import levenshtein_distance
+from lionfuncs.algo.levenshtein_distance import levenshtein_distance
 
 
 @pytest.mark.parametrize(

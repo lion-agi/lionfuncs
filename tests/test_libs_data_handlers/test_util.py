@@ -1,6 +1,6 @@
 import pytest
 
-from lionfuncs.data_handlers.utils import (
+from lionfuncs.data.utils import (
     deep_update,
     get_target_container,
     is_homogeneous,

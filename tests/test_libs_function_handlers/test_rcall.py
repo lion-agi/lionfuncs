@@ -2,7 +2,7 @@ import asyncio
 import unittest
 from unittest.mock import AsyncMock, patch
 
-from lionfuncs.function_handlers.rcall import rcall
+from lionfuncs.func.rcall import rcall
 
 
 async def async_func(x: int) -> int:

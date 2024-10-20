@@ -1,6 +1,6 @@
 import pytest
 
-from lionfuncs.data_handlers.npop import npop
+from lionfuncs.data.npop import npop
 from lionfuncs.ln_undefined import LN_UNDEFINED
 
 

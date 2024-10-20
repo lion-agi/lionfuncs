@@ -2,7 +2,7 @@ import asyncio
 import unittest
 from unittest.mock import AsyncMock, patch
 
-from lionfuncs.function_handlers.pcall import pcall
+from lionfuncs.func.pcall import pcall
 
 
 async def async_func() -> int:
