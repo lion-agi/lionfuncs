@@ -44,6 +44,13 @@ from .integrations.pandas_ import read_csv, read_json, to_csv, to_df, to_excel
 from .integrations.pydantic_ import break_down_pydantic_annotation, new_model
 from .ln_undefined import LN_UNDEFINED, LionUndefinedType
 from .note import Note, note
+from .package.check_import import check_import
+from .package.get_cpu_architecture import get_cpu_architecture
+from .package.install_import import install_import
+from .package.is_import_installed import is_import_installed
+from .package.list_installed_packages import list_installed_packages
+from .package.uninstall_package import uninstall_package
+from .package.update_package import update_package
 from .parse.as_readable_json import as_readable_json
 from .parse.choose_most_similar import choose_most_similar
 from .parse.extract_code_block import extract_code_block
@@ -159,4 +166,11 @@ __all__ = [
     "LN_UNDEFINED",
     "LionUndefinedType",
     "__version__",
+    "get_cpu_architecture",
+    "check_import",
+    "install_import",
+    "is_import_installed",
+    "uninstall_package",
+    "list_installed_packages",
+    "update_package",
 ]
