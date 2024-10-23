@@ -2,10 +2,7 @@
 
 import pytest
 
-from lionfuncs.parse.fuzzy_parse_json import (
-    fix_json_string,
-    fuzzy_parse_json,
-)
+from lionfuncs.parse.fuzzy_parse_json import fix_json_string, fuzzy_parse_json
 
 
 def test_fuzzy_parse_json_basic():

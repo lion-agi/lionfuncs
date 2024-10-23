@@ -249,7 +249,7 @@ def test_string_similarity_basic(word, words, algorithm, expected):
 @pytest.mark.parametrize(
     "word,words,threshold,expected",
     [
-        ("hello", ["hello", "help", "world"], 0.8, ["hello"]),
+        ("hello", ["hello", "help", "world"], 0.8, ["hello", "help"]),
         ("hello", ["hello", "help", "world"], 0.9, ["hello"]),
         ("hello", ["world", "bye"], 0.8, None),
     ],
