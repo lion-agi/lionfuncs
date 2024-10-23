@@ -1,10 +1,10 @@
 from .algo.string_similarity import string_similarity
 from .data.flatten import flatten
-from .data.nset import nset
 from .data.nfilter import nfilter
-from .data.nmerge import nmerge
 from .data.nget import nget
+from .data.nmerge import nmerge
 from .data.npop import npop
+from .data.nset import nset
 from .data.unflatten import unflatten
 from .data.utils import is_homogeneous, is_same_dtype, is_structure_homogeneous
 from .file.chunk_by_chars import chunk_by_chars
@@ -43,7 +43,6 @@ from .package.uninstall_package import uninstall_package
 from .package.update_package import update_package
 from .parse.as_readable import as_readable, as_readable_json
 from .parse.extract_code_block import extract_code_block
-from .parse.extract_code_block import extract_code_block
 from .parse.extract_json_schema import (
     extract_json_schema,
     json_schema_to_cfg,
@@ -53,12 +52,9 @@ from .parse.extract_json_schema import (
 from .parse.function_to_schema import function_to_schema
 from .parse.fuzzy_parse_json import fuzzy_parse_json
 from .parse.to_dict import to_dict
-from .parse.to_list import to_list
 from .parse.to_json import to_json
+from .parse.to_list import to_list
 from .parse.to_num import to_num
-from .validate.validate_keys import validate_keys
-from .validate.validate_boolean import validate_boolean
-from .validate.validate_mapping import validate_mapping
 from .parse.xml_parser import dict_to_xml, xml_to_dict
 from .utils import (
     copy,
@@ -73,6 +69,9 @@ from .utils import (
     time,
     unique_hash,
 )
+from .validate.validate_boolean import validate_boolean
+from .validate.validate_keys import validate_keys
+from .validate.validate_mapping import validate_mapping
 
 __all__ = [
     "string_similarity",

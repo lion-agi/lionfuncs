@@ -9,8 +9,8 @@ from lionfuncs.data.nget import nget
 from lionfuncs.data.ninsert import ninsert
 from lionfuncs.data.npop import npop
 from lionfuncs.data.nset import nset
-from lionfuncs.parse.to_list import to_list
 from lionfuncs.ln_undefined import LN_UNDEFINED
+from lionfuncs.parse.to_list import to_list
 from lionfuncs.utils import copy
 
 INDICE_TYPE = str | list[str | int]
