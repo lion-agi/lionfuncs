@@ -5,8 +5,6 @@ including cosine similarity, Hamming distance, Jaro-Winkler distance, and
 Levenshtein distance.
 """
 
-"""String similarity interface module."""
-
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from difflib import SequenceMatcher
@@ -237,7 +235,7 @@ class MatchResult:
 def string_similarity(
     word: str,
     correct_words: Sequence[str],
-    algorithm: SIMILARITY_TYPE | Callable[[str, str], float] = "levenshtein",
+    algorithm: SIMILARITY_TYPE | Callable[[str, str], float] = "jaro_winkler",
     threshold: float = 0.0,
     case_sensitive: bool = False,
     return_most_similar: bool = False,
