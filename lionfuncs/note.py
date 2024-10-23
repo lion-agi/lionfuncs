@@ -9,7 +9,7 @@ from lionfuncs.data.nget import nget
 from lionfuncs.data.ninsert import ninsert
 from lionfuncs.data.npop import npop
 from lionfuncs.data.nset import nset
-from lionfuncs.data.to_list import to_list
+from lionfuncs.parse.to_list import to_list
 from lionfuncs.ln_undefined import LN_UNDEFINED
 from lionfuncs.utils import copy
 
