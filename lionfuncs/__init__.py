@@ -55,6 +55,7 @@ from .parse.to_dict import to_dict
 from .parse.to_json import to_json
 from .parse.to_list import to_list
 from .parse.to_num import to_num
+from .parse.to_str import to_str
 from .parse.xml_parser import dict_to_xml, xml_to_dict
 from .utils import (
     copy,
@@ -140,6 +141,7 @@ __all__ = [
     "to_list",
     "to_json",
     "to_num",
+    "to_str",
     "validate_keys",
     "validate_boolean",
     "validate_mapping",

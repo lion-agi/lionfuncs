@@ -3,9 +3,12 @@
 import json
 import re
 from typing import Any
+from .fuzzy_parse_json import fuzzy_parse_json
 
 
-def to_json(string: str | list[str], /) -> list[dict[str, Any]] | dict:
+def to_json(
+    string: str | list[str], /, fuzzy_parse: bool = False
+) -> list[dict[str, Any]] | dict:
     """Extract and parse JSON content from a string or markdown code blocks.
 
     This function attempts to parse JSON directly from the input string first.
@@ -42,11 +45,14 @@ def to_json(string: str | list[str], /) -> list[dict[str, Any]] | dict:
         ... ''')
         [{'key1': 'value1'}, {'key2': 'value2'}]
     """
+
     if isinstance(string, list):
         string = "\n".join(string)
 
     # Try direct JSON parsing first
     try:
+        if fuzzy_parse:
+            return fuzzy_parse_json(string)
         return json.loads(string)
     except Exception:
         pass
@@ -61,6 +67,8 @@ def to_json(string: str | list[str], /) -> list[dict[str, Any]] | dict:
     if len(matches) == 1:
         return json.loads(matches[0])
 
+    if fuzzy_parse:
+        return [fuzzy_parse_json(match) for match in matches]
     return [json.loads(match) for match in matches]
 
 

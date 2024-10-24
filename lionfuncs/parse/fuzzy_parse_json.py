@@ -5,7 +5,9 @@ import re
 from typing import Any
 
 
-def fuzzy_parse_json(str_to_parse: str, /) -> dict[str, Any]:
+def fuzzy_parse_json(
+    str_to_parse: str, /
+) -> dict[str, Any] | list[dict[str, Any]]:
     """Parse a JSON string with automatic fixing of common formatting issues.
 
     Args:
@@ -25,29 +27,20 @@ def fuzzy_parse_json(str_to_parse: str, /) -> dict[str, Any]:
         raise ValueError("Input string is empty")
 
     try:
-        result = json.loads(str_to_parse)
-        if not isinstance(result, dict):
-            raise TypeError("Parsed result must be a dictionary")
-        return result
-    except json.JSONDecodeError:
+        return json.loads(str_to_parse)
+    except Exception:
         pass
 
     cleaned = _clean_json_string(str_to_parse)
     try:
-        result = json.loads(cleaned)
-        if not isinstance(result, dict):
-            raise TypeError("Parsed result must be a dictionary")
-        return result
-    except json.JSONDecodeError:
+        return json.loads(cleaned)
+    except Exception:
         pass
 
     try:
         fixed = fix_json_string(cleaned)
-        result = json.loads(fixed)
-        if not isinstance(result, dict):
-            raise TypeError("Parsed result must be a dictionary")
-        return result
-    except (json.JSONDecodeError, ValueError) as e:
+        return json.loads(fixed)
+    except Exception as e:
         raise ValueError(
             f"Failed to parse JSON string after all fixing attempts: {e}"
         ) from e
