@@ -1,3 +1,5 @@
+"""Numeric conversion utilities."""
+
 import re
 from decimal import Decimal
 from typing import Any, Literal, TypeVar, Union

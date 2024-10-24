@@ -1,9 +1,4 @@
-"""Type-safe dictionary conversion utilities.
-
-This module provides comprehensive functionality for converting various Python
-objects to dictionaries, with support for recursive conversion, custom parsers,
-and multiple input types.
-"""
+"""Type-safe dictionary conversion utilities."""
 
 import json
 from collections.abc import Callable, Iterable, Mapping, Sequence

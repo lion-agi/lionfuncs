@@ -3,8 +3,8 @@ from collections.abc import Callable, Sequence
 from typing import Any, TypeVar
 
 from lionfuncs.func.ucall import ucall
-from lionfuncs.func.utils import is_coroutine_func
 from lionfuncs.ln_undefined import LN_UNDEFINED
+from lionfuncs.utils.async_utils import AsyncUtils
 
 T = TypeVar("T")
 ErrorHandler = Callable[[Exception], Any]
@@ -114,7 +114,7 @@ async def pcall(
             except Exception as e:
                 if error_map and type(e) in error_map:
                     handler = error_map[type(e)]
-                    if is_coroutine_func(handler):
+                    if AsyncUtils.is_coroutine_func(handler):
                         return index, await handler(e)
                     else:
                         return index, handler(e)

@@ -1,8 +1,4 @@
-"""List conversion utilities for Python objects.
-
-This module provides comprehensive functionality for converting various Python
-objects to lists, with support for flattening, filtering, and type preservation.
-"""
+"""List conversion utilities"""
 
 from collections.abc import Iterable, Mapping, Sequence
 from typing import Any, TypeVar, overload

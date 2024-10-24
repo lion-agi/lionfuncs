@@ -1,4 +1,4 @@
-# File: lionfuncs/parse/to_str.py
+"""String conversion utilities."""
 
 import json
 from collections.abc import Callable, Mapping
