@@ -11,6 +11,7 @@ __all__ = [
     "ndelete",
     "ncopy",
     "nmove",
+    "ninsert",
     "get_target_container",
     "is_homogeneous",
     "is_same_dtype",
