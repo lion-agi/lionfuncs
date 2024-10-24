@@ -1,25 +1,33 @@
+"""
+Container class for managing nested dictionary data structures.
+
+Features:
+- Rich nested data operations
+- Dictionary-like interface
+- Type-safe operations
+- Flattening support
+- Serialization support
+"""
+
 from collections.abc import ItemsView, Iterator, ValuesView
-from typing import Any
+from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseModel, ConfigDict, Field, field_serializer
-from typing_extensions import override
 
-from lionfuncs.data.flatten import flatten
-from lionfuncs.data.nget import nget
+from lionfuncs.data import flatten, nget, ninsert, npop, nset
 from lionfuncs.data.ninsert import ninsert
-from lionfuncs.data.npop import npop
-from lionfuncs.data.nset import nset
-from lionfuncs.data.to_list import to_list
 from lionfuncs.ln_undefined import LN_UNDEFINED
+from lionfuncs.parse.to_list import to_list
 from lionfuncs.utils import copy
 
-INDICE_TYPE = str | list[str | int]
+# Type definitions
+INDICE_TYPE = Union[str, List[Union[str, int]]]
 
 
 class Note(BaseModel):
     """A container for managing nested dictionary data structures."""
 
-    content: dict[str, Any] = Field(default_factory=dict)
+    content: Dict[str, Any] = Field(default_factory=dict)
 
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
@@ -28,13 +36,13 @@ class Note(BaseModel):
     )
 
     def __init__(self, **kwargs: Any) -> None:
-        """Initialize a Note instance with the given keyword arguments."""
+        """Initialize Note instance with given keyword arguments."""
         super().__init__()
         self.content = kwargs
 
     @field_serializer("content")
-    def _serialize_content(self, value: Any) -> dict[str, Any]:
-        """Serialize the content"""
+    def _serialize_content(self, value: Any) -> Dict[str, Any]:
+        """Serialize content with deep copy."""
         output_dict = copy(value, deep=True)
         return output_dict
 
@@ -44,17 +52,35 @@ class Note(BaseModel):
         /,
         default: Any = LN_UNDEFINED,
     ) -> Any:
-        """Remove and return an item from the nested structure."""
+        """
+        Remove and return item from nested structure.
+
+        Args:
+            indices: Path to item.
+            default: Value to return if item not found.
+        """
         indices = to_list(indices, flatten=True, dropna=True)
         return npop(self.content, indices, default)
 
     def insert(self, indices: INDICE_TYPE, value: Any, /) -> None:
-        """Insert a value into the nested structure at the specified indice"""
+        """
+        Insert value into nested structure.
+
+        Args:
+            indices: Path where to insert.
+            value: Value to insert.
+        """
         indices = to_list(indices, flatten=True, dropna=True)
         ninsert(self.content, indices, value)
 
     def set(self, indices: INDICE_TYPE, value: Any, /) -> None:
-        """Set a value in the nested structure at the specified indice"""
+        """
+        Set value in nested structure.
+
+        Args:
+            indices: Path where to set.
+            value: Value to set.
+        """
         indices = to_list(indices, flatten=True, dropna=True)
 
         if self.get(indices, None) is None:
@@ -68,29 +94,35 @@ class Note(BaseModel):
         /,
         default: Any = LN_UNDEFINED,
     ) -> Any:
-        """Get a value from the nested structure at the specified indice"""
+        """
+        Get value from nested structure.
+
+        Args:
+            indices: Path to value.
+            default: Value to return if not found.
+        """
         indices = to_list(indices, flatten=True, dropna=True)
         return nget(self.content, indices, default)
 
-    def keys(self, /, flat: bool = False, **kwargs: Any) -> list:
+    def keys(self, /, flat: bool = False, **kwargs: Any) -> List:
         """
-        Get the keys of the Note.
+        Get Note keys.
 
         Args:
-            flat: If True, return flattened keys.
-            kwargs: Additional keyword arguments for flattening
+            flat: Return flattened keys if True.
+            kwargs: Additional flattening arguments.
         """
         if flat:
-            return flatten(self.content, **kwargs).keys()
+            return list(flatten(self.content, **kwargs).keys())
         return list(self.content.keys())
 
     def values(self, /, flat: bool = False, **kwargs: Any) -> ValuesView:
         """
-        Get the values of the Note.
+        Get Note values.
 
         Args:
-            flat: If True, return flattened values.
-            kwargs: Additional keyword arguments for flattening
+            flat: Return flattened values if True.
+            kwargs: Additional flattening arguments.
         """
         if flat:
             return flatten(self.content, **kwargs).values()
@@ -98,30 +130,28 @@ class Note(BaseModel):
 
     def items(self, /, flat: bool = False, **kwargs: Any) -> ItemsView:
         """
-        Get the items of the Note.
+        Get Note items.
 
         Args:
-            flat: If True, return flattened items.
-            kwargs: Additional keyword arguments for flattening
+            flat: Return flattened items if True.
+            kwargs: Additional flattening arguments.
         """
         if flat:
             return flatten(self.content, **kwargs).items()
         return self.content.items()
 
-    def to_dict(self, **kwargs: Any) -> dict[str, Any]:
+    def to_dict(self, **kwargs: Any) -> Dict[str, Any]:
         """
-        Convert the Note to a dictionary.
+        Convert Note to dictionary.
 
-        kwargs: Additional keyword arguments for BaseModel.model_dump
-
-        Returns:
-            A dictionary representation of the Note.
+        Args:
+            kwargs: Additional model_dump arguments.
         """
         output_dict = self.model_dump(**kwargs)
         return output_dict["content"]
 
     def clear(self) -> None:
-        """Clear the content of the Note."""
+        """Clear Note content."""
         self.content.clear()
 
     def update(
@@ -129,6 +159,13 @@ class Note(BaseModel):
         indices: INDICE_TYPE,
         value: Any,
     ) -> None:
+        """
+        Update nested structure at indices.
+
+        Args:
+            indices: Path to update.
+            value: Value to update with.
+        """
         existing = None
         if not indices:
             existing = self.content
@@ -154,52 +191,63 @@ class Note(BaseModel):
                 existing.update(value)
             else:
                 raise ValueError(
-                    "Cannot update a dictionary with a non-dictionary value."
+                    "Cannot update dictionary with non-dictionary value"
                 )
 
     @classmethod
     def from_dict(cls, kwargs: Any) -> "Note":
-        """Create a Note from a dictionary."""
+        """
+        Create Note from dictionary.
+
+        Args:
+            kwargs: Dictionary to convert.
+        """
         return cls(**kwargs)
 
     def __contains__(self, indices: INDICE_TYPE) -> bool:
-        """Check if the Note contains the specified indices."""
+        """Check if Note contains indices."""
         return self.content.get(indices, LN_UNDEFINED) is not LN_UNDEFINED
 
     def __len__(self) -> int:
-        """Return the length of the Note's content."""
+        """Get length of Note content."""
         return len(self.content)
 
     def __iter__(self) -> Iterator[str]:
-        """Return an iterator over the Note's content."""
+        """Get iterator over Note content."""
         return iter(self.content)
 
     def __next__(self) -> str:
-        """Return the next item in the Note's content."""
+        """Get next item in Note content."""
         return next(iter(self.content))
 
-    @override
     def __str__(self) -> str:
-        """Return a string representation of the Note's content."""
+        """Get string representation."""
         return str(self.content)
 
-    @override
     def __repr__(self) -> str:
-        """Return a detailed string representation of the Note's content."""
+        """Get detailed string representation."""
         return repr(self.content)
 
     def __getitem__(self, indices: INDICE_TYPE) -> Any:
-        """Get an item from the Note using index notation."""
+        """Get item using index notation."""
         indices = to_list(indices, flatten=True, dropna=True)
         return self.get(indices)
 
     def __setitem__(self, indices: INDICE_TYPE, value: Any) -> None:
-        """Set an item in the Note using index notation."""
+        """Set item using index notation."""
         self.set(indices, value)
 
 
 def note(**kwargs: Any) -> Note:
-    """Create a Note object from keyword arguments."""
+    """
+    Create Note object from keyword arguments.
+
+    Args:
+        kwargs: Initial data for Note.
+
+    Returns:
+        New Note instance.
+    """
     return Note(**kwargs)
 
 

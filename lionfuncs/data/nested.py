@@ -17,6 +17,7 @@ from lionfuncs.data.utils import (
     validate_nested_structure,
 )
 from lionfuncs.ln_undefined import LN_UNDEFINED
+from lionfuncs.parse.to_list import to_list
 
 T = TypeVar("T")
 NestedStructure = Union[Dict[str, Any], List[Any]]
@@ -603,11 +604,6 @@ def _merge_sequences(
         return sorted(result, key=lambda x: (isinstance(x, str), x))
 
     return result
-
-
-from typing import Any
-
-from lionfuncs.data.to_list import to_list
 
 
 def ninsert(
