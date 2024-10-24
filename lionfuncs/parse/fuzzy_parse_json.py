@@ -1,87 +1,120 @@
-from json import loads
+"""JSON fixing utilities with proper escape handling."""
+
+import json
+import re
 from typing import Any
 
 
 def fuzzy_parse_json(
-    str_to_parse: str, /, *, suppress=False
-) -> dict[str, Any]:
-    """
-    Attempt to parse a JSON string, applying fixes for common issues.
-
-    This function tries to parse the given JSON string using the `loads`
-    function from the `json` module. If the initial parsing fails, it
-    attempts to fix common formatting issues in the JSON string using the
-    `fix_json_string` function and then tries parsing again. If the JSON
-    string contains single quotes, they are replaced with double quotes
-    before making a final attempt to parse the string.
+    str_to_parse: str, /
+) -> dict[str, Any] | list[dict[str, Any]]:
+    """Parse a JSON string with automatic fixing of common formatting issues.
 
     Args:
-        str_to_parse: The JSON string to parse.
+        str_to_parse: The JSON string to parse
 
     Returns:
-        The parsed JSON object as a dictionary.
+        The parsed JSON object as a dictionary
 
     Raises:
-        ValueError: If the JSON string cannot be parsed even after
-            attempts to fix it.
-
-    Example:
-        >>> fuzzy_parse_json('{"key": "value"}')
-        {'key': 'value'}
+        ValueError: If the string cannot be parsed as valid JSON
+        TypeError: If the input is not a string or the result is not a dict
     """
+    if not isinstance(str_to_parse, str):
+        raise TypeError("Input must be a string")
+
+    if not str_to_parse.strip():
+        raise ValueError("Input string is empty")
+
     try:
-        return loads(str_to_parse)
+        return json.loads(str_to_parse)
     except Exception:
-        fixed_str = fix_json_string(str_to_parse)
-        try:
-            return loads(fixed_str)
-        except Exception:
-            try:
-                fixed_str = fixed_str.replace("'", '"')
-                fixed_str = fix_json_string(fixed_str)
-                return loads(fixed_str)
-            except Exception as e:
-                if suppress:
-                    return None
-                else:
-                    raise ValueError(
-                        f"Failed to parse JSON after fixing attempts: {e}"
-                    ) from e
+        pass
+
+    cleaned = _clean_json_string(str_to_parse)
+    try:
+        return json.loads(cleaned)
+    except Exception:
+        pass
+
+    try:
+        fixed = fix_json_string(cleaned)
+        return json.loads(fixed)
+    except Exception as e:
+        raise ValueError(
+            f"Failed to parse JSON string after all fixing attempts: {e}"
+        ) from e
+
+
+def _clean_json_string(s: str) -> str:
+    """Clean and standardize a JSON string."""
+    s = re.sub(r"(?<!\\)'", '"', s)
+    s = re.sub(r"\s+", " ", s)
+    s = re.sub(r'([{,])\s*([^"\s]+):', r'\1"\2":', s)
+    return s.strip()
 
 
 def fix_json_string(str_to_parse: str, /) -> str:
-    """
-    Fix a JSON string by ensuring all brackets are properly closed.
-
-    This function iterates through the characters of the JSON string and
-    keeps track of the opening brackets encountered. If a closing bracket
-    is found without a matching opening bracket or if there are extra
-    closing brackets, a ValueError is raised. Any remaining opening
-    brackets at the end of the string are closed with their corresponding
-    closing brackets.
+    """Fix a JSON string by ensuring all brackets are properly closed.
 
     Args:
-        str_to_parse: The JSON string to fix.
+        str_to_parse: JSON string to fix
 
     Returns:
-        The fixed JSON string with properly closed brackets.
+        Fixed JSON string with proper bracket closure
 
     Raises:
-        ValueError: If mismatched or extra closing brackets are found.
-
-    Example:
-        >>> fix_json_string('{"key": "value"')
-        '{"key": "value"}'
+        ValueError: If mismatched or extra closing brackets are found
     """
+    if not str_to_parse:
+        raise ValueError("Input string is empty")
+
     brackets = {"{": "}", "[": "]"}
     open_brackets = []
+    pos = 0
+    length = len(str_to_parse)
 
-    for char in str_to_parse:
+    while pos < length:
+        char = str_to_parse[pos]
+
+        # Handle escape sequences
+        if char == "\\":
+            pos += 2  # Skip escape sequence
+            continue
+
+        # Handle string content
+        if char == '"':
+            pos += 1
+            # Skip until closing quote, accounting for escapes
+            while pos < length:
+                if str_to_parse[pos] == "\\":
+                    pos += 2  # Skip escape sequence
+                    continue
+                if str_to_parse[pos] == '"':
+                    break
+                pos += 1
+            pos += 1
+            continue
+
+        # Handle brackets
         if char in brackets:
             open_brackets.append(brackets[char])
         elif char in brackets.values():
-            if not open_brackets or open_brackets[-1] != char:
-                raise ValueError("Mismatched or extra closing bracket found.")
+            if not open_brackets:
+                raise ValueError(
+                    f"Extra closing bracket '{char}' at position {pos}"
+                )
+            if open_brackets[-1] != char:
+                raise ValueError(
+                    f"Mismatched bracket '{char}' at position {pos}"
+                )
             open_brackets.pop()
 
-    return str_to_parse + "".join(reversed(open_brackets))
+        pos += 1
+
+    # Add missing closing brackets
+    closing_brackets = "".join(reversed(open_brackets))
+    return str_to_parse + closing_brackets
+
+
+__all__ = ["fuzzy_parse_json", "fix_json_string"]

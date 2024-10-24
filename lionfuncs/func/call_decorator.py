@@ -4,10 +4,11 @@ from functools import wraps
 from typing import Any, TypeVar
 
 from lionfuncs.func.rcall import rcall
-from lionfuncs.func.throttle import Throttle
 from lionfuncs.func.ucall import ucall
-from lionfuncs.func.utils import force_async, is_coroutine_func
 from lionfuncs.ln_undefined import LN_UNDEFINED
+
+from lionfuncs.utils.async_utils import AsyncUtils, Throttle
+
 
 T = TypeVar("T")
 F = TypeVar("F", bound=Callable[..., Any])
@@ -83,8 +84,8 @@ class CallDecorator:
         """
 
         def decorator(func: F) -> F:
-            if not is_coroutine_func(func):
-                func = force_async(func)
+            if not AsyncUtils.is_coroutine_func(func):
+                func = AsyncUtils.force_async(func)
             throttle_instance = Throttle(period)
 
             @wraps(func)
@@ -108,8 +109,8 @@ class CallDecorator:
         """
 
         def decorator(func: F) -> F:
-            if not is_coroutine_func(func):
-                func = force_async(func)
+            if not AsyncUtils.is_coroutine_func(func):
+                func = AsyncUtils.force_async(func)
             semaphore = asyncio.Semaphore(limit)
 
             @wraps(func)
@@ -243,7 +244,7 @@ class CallDecorator:
         """
 
         def decorator(func: Callable[..., list[Any]]) -> Callable:
-            if is_coroutine_func(func):
+            if AsyncUtils.is_coroutine_func(func):
 
                 @wraps(func)
                 async def async_wrapper(*args, **kwargs) -> list[Any]:

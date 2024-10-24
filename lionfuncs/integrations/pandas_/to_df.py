@@ -3,8 +3,8 @@ from typing import Any, Literal
 from pandas import DataFrame, Series, concat
 from pandas.core.generic import NDFrame
 
-from lionfuncs.data.to_dict import to_dict
-from lionfuncs.data.to_list import to_list
+from lionfuncs.parse.to_dict import to_dict
+from lionfuncs.parse.to_list import to_list
 
 
 def to_df(

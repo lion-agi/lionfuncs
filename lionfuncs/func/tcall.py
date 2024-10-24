@@ -1,9 +1,11 @@
 import asyncio
 from collections.abc import Callable
 from typing import Any, TypeVar
+from lionfuncs.utils.async_utils import AsyncUtils
 
 T = TypeVar("T")
 ErrorHandler = Callable[[Exception], None]
+from lionfuncs.ln_undefined import LN_UNDEFINED
 
 
 async def tcall(
@@ -11,12 +13,12 @@ async def tcall(
     /,
     *args: Any,
     initial_delay: float = 0,
+    timing: bool = False,
+    timeout: float | None = None,
+    timeout_default: Any = LN_UNDEFINED,  # priority 1
+    error_default: Any = LN_UNDEFINED,  # priority 1
     error_msg: str | None = None,
-    suppress_err: bool = False,
-    retry_timing: bool = False,
-    retry_timeout: float | None = None,
-    retry_default: Any = None,
-    error_map: dict[type, ErrorHandler] | None = None,
+    error_map: dict[type, ErrorHandler] | None = None,  # priority 2
     **kwargs: Any,
 ) -> T | tuple[T, float]:
     """Execute a function asynchronously with timing and error handling.
@@ -29,7 +31,6 @@ async def tcall(
         *args: Positional arguments for the function.
         initial_delay: Delay before execution (seconds).
         error_msg: Custom error message prefix.
-        suppress_err: If True, return default on error instead of raising.
         retry_timing: If True, return execution duration.
         retry_timeout: Timeout for function execution (seconds).
         retry_default: Value to return if an error occurs and suppress_err
@@ -57,55 +58,48 @@ async def tcall(
         - Provides timing information for performance analysis.
         - Supports custom error handling and suppression.
     """
-    start = asyncio.get_event_loop().time()
+    start = AsyncUtils.time()
 
     try:
         await asyncio.sleep(initial_delay)
         result = None
 
-        if asyncio.iscoroutinefunction(func):
-            # Asynchronous function
-            if retry_timeout is None:
-                result = await func(*args, **kwargs)
-            else:
-                result = await asyncio.wait_for(
-                    func(*args, **kwargs), timeout=retry_timeout
-                )
-        else:
-            # Synchronous function
-            if retry_timeout is None:
-                result = func(*args, **kwargs)
-            else:
-                result = await asyncio.wait_for(
-                    asyncio.shield(asyncio.to_thread(func, *args, **kwargs)),
-                    timeout=retry_timeout,
-                )
+        if not AsyncUtils.is_coroutine_func(func):
+            func = AsyncUtils.force_async(func)
 
-        duration = asyncio.get_event_loop().time() - start
-        return (result, duration) if retry_timing else result
+        if timeout is None:
+            result = await func(*args, **kwargs)
+        else:
+            result = await asyncio.wait_for(
+                func(*args, **kwargs), timeout=timeout
+            )
+
+        duration = AsyncUtils.time() - start
+        return (result, duration) if timing else result
 
     except asyncio.TimeoutError as e:
-        error_msg = (
-            f"{error_msg or ''} Timeout {retry_timeout} seconds exceeded"
-        )
-        if suppress_err:
-            duration = asyncio.get_event_loop().time() - start
-            return (retry_default, duration) if retry_timing else retry_default
-        else:
-            raise asyncio.TimeoutError(error_msg) from e
+
+        if timeout_default is not LN_UNDEFINED:
+            return (timeout_default, duration) if timing else timeout_default
+
+        if asyncio.TimeoutError in error_map:
+            result = await AsyncUtils.custom_error_handler(e, error_map)
+            duration = AsyncUtils.time() - start
+            return (result, duration) if timing else result
+
+        error_msg = f"{error_msg or ''} Timeout {timeout} seconds exceeded"
+        raise asyncio.TimeoutError(error_msg) from e
 
     except Exception as e:
+
+        if error_default is not LN_UNDEFINED:
+            duration = AsyncUtils.time() - start
+            return (error_default, duration) if timing else error_default
+
         if error_map and type(e) in error_map:
-            error_map[type(e)](e)
-            duration = asyncio.get_event_loop().time() - start
-            return (None, duration) if retry_timing else None
-        error_msg = (
-            f"{error_msg} Error: {e}"
-            if error_msg
-            else f"An error occurred in async execution: {e}"
-        )
-        if suppress_err:
-            duration = asyncio.get_event_loop().time() - start
-            return (retry_default, duration) if retry_timing else retry_default
-        else:
-            raise RuntimeError(error_msg) from e
+            result = await AsyncUtils.custom_error_handler(e, error_map)
+            duration = AsyncUtils.time() - start
+            return (result, duration) if timing else result
+
+        error_msg = f"{error_msg or ''}Error: {e}"
+        raise type(e)(error_msg) from e
