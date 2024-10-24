@@ -10,12 +10,11 @@ Features:
 """
 
 from collections.abc import ItemsView, Iterator, ValuesView
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Union
 
 from pydantic import BaseModel, ConfigDict, Field, field_serializer
 
 from lionfuncs.data import flatten, nget, ninsert, npop, nset
-from lionfuncs.data.ninsert import ninsert
 from lionfuncs.ln_undefined import LN_UNDEFINED
 from lionfuncs.parse.to_list import to_list
 from lionfuncs.utils import copy
