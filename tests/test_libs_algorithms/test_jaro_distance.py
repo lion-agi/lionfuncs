@@ -1,6 +1,6 @@
 import pytest
 
-from lionfuncs.algo.jaro_distance import jaro_distance, jaro_winkler_similarity
+from lionfuncs.algo.string_similarity import jaro_distance, jaro_winkler_similarity
 
 
 @pytest.mark.parametrize(
