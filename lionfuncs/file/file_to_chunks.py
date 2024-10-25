@@ -14,7 +14,7 @@ def file_to_chunks(
     threshold: int = 200,
     encoding: str = "utf-8",
     chunk_by: str = "chars",
-    tokenizer: Optional[Callable[[str], List[str]]] = None,
+    tokenizer: Optional[Callable] = None,
     custom_metadata: Optional[Dict[str, Any]] = None,
     output_dir: Optional[Union[str, Path]] = None,
     verbose: bool = False,

@@ -11,18 +11,20 @@ Features:
 - Result mapping
 """
 
+from __future__ import annotations
+
 import asyncio
 from collections.abc import Callable
 from functools import wraps
-from typing import Any, TypeVar
+from typing import Any, Dict, Optional, TypeVar
 
 from lionfuncs.func.call_ import rcall, ucall
 from lionfuncs.func.utils import Throttle, force_async, is_coroutine_func
 from lionfuncs.ln_undefined import LN_UNDEFINED
 
 T = TypeVar("T")
-F = TypeVar("F", bound=Callable[..., Any])
-ErrorHandler = Callable[[Exception], None]
+F = TypeVar("F", bound=Callable)
+ErrorHandler = TypeVar("ErrorHandler", bound=Callable)
 
 
 class CallDecorator:
@@ -35,12 +37,12 @@ class CallDecorator:
         retry_delay: float = 0,
         backoff_factor: float = 1,
         retry_default: Any = LN_UNDEFINED,
-        retry_timeout: float | None = None,
+        retry_timeout: Optional[float] = None,
         retry_timing: bool = False,
         verbose_retry: bool = True,
-        error_msg: str | None = None,
-        error_map: dict[type, ErrorHandler] | None = None,
-    ) -> Callable[[F], F]:
+        error_msg: Optional[str] = None,
+        error_map: Optional[Union[Dict, None]] = None,
+    ) -> Callable:
         """
         Decorator to automatically retry a function call on failure.
 
@@ -90,7 +92,7 @@ class CallDecorator:
         return decorator
 
     @staticmethod
-    def throttle(period: float) -> Callable[[F], F]:
+    def throttle(period: float) -> Callable:
         """
         Decorator to limit the execution frequency of a function.
 
@@ -122,7 +124,7 @@ class CallDecorator:
         return decorator
 
     @staticmethod
-    def max_concurrent(limit: int) -> Callable[[F], F]:
+    def max_concurrent(limit: int) -> Callable:
         """
         Decorator to limit the maximum number of concurrent executions.
 
@@ -154,7 +156,7 @@ class CallDecorator:
         return decorator
 
     @staticmethod
-    def compose(*functions: Callable[[T], T]) -> Callable[[F], F]:
+    def compose(*functions: Callable) -> Callable:
         """
         Decorator to compose multiple functions, applying in sequence.
 
@@ -192,13 +194,13 @@ class CallDecorator:
 
     @staticmethod
     def pre_post_process(
-        preprocess: Callable[..., Any] | None = None,
-        postprocess: Callable[..., Any] | None = None,
+        preprocess: Optional[Callable] = None,
+        postprocess: Optional[Callable] = None,
         preprocess_args: tuple = (),
         preprocess_kwargs: dict = {},
         postprocess_args: tuple = (),
         postprocess_kwargs: dict = {},
-    ) -> Callable[[F], F]:
+    ) -> Callable:
         """
         Decorator to apply pre-processing and post-processing functions.
 
@@ -271,7 +273,7 @@ class CallDecorator:
         return decorator
 
     @staticmethod
-    def map(function: Callable[[Any], Any]) -> Callable[[F], F]:
+    def map(function: Callable) -> Callable:
         """
         Decorator to map a function over async function results.
 

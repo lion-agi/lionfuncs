@@ -29,10 +29,10 @@ class KeysDict(Dict[str, Any]):
 
 def validate_keys(
     d_: Dict[str, Any],
-    keys: Union[Sequence[str], KeysDict],
+    keys: Union[Sequence, KeysDict],
     /,
     *,
-    similarity_algo: Union[str, Callable[[str, str], float]] = "jaro_winkler",
+    similarity_algo: Union[str, Callable] = "jaro_winkler",
     similarity_threshold: float = 0.85,
     fuzzy_match: bool = True,
     handle_unmatched: HandleUnmatchedType = "ignore",

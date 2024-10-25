@@ -6,6 +6,7 @@ import asyncio
 import functools
 import logging
 import time
+from ast import Dict
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache, wraps
@@ -15,7 +16,7 @@ from lionfuncs.utils import time as _t
 
 T = TypeVar("T")
 
-ErrorHandler = Callable[[Exception], Any]
+ErrorHandler = TypeVar("ErrorHandler", bound=Callable)
 
 
 class Throttle:
@@ -47,7 +48,7 @@ class Throttle:
         self.period = period
         self.last_called = 0
 
-    def __call__(self, func: Callable[..., T]) -> Callable[..., T]:
+    def __call__(self, func: Callable) -> Callable:
         """
         Decorate a synchronous function with the throttling mechanism.
 
@@ -73,9 +74,7 @@ class Throttle:
 
         return wrapper
 
-    def __call_async__(
-        self, func: Callable[..., Callable[..., T]]
-    ) -> Callable[..., Callable[..., T]]:
+    def __call_async__(self, func: Callable) -> Callable:
         """
         Decorate an asynchronous function with the throttling mechanism.
 
@@ -106,7 +105,7 @@ __all__ = ["Throttle"]
 
 
 # Type conversion utilities
-def force_async(fn: Callable[..., T]) -> Callable[..., Callable[..., T]]:
+def force_async(fn: Callable) -> Callable:
     """
     Convert a synchronous function to an asynchronous function using a thread pool.
 
@@ -135,7 +134,7 @@ def force_async(fn: Callable[..., T]) -> Callable[..., Callable[..., T]]:
 
 
 @lru_cache(maxsize=None)
-def is_coroutine_func(func: Callable[..., Any]) -> bool:
+def is_coroutine_func(func: Callable) -> bool:
     """
     Check if a function is a coroutine function.
 
@@ -156,9 +155,7 @@ def is_coroutine_func(func: Callable[..., Any]) -> bool:
 
 
 # Error handling utilities
-async def custom_error_handler(
-    error: Exception, error_map: dict[type, ErrorHandler]
-) -> None:
+async def custom_error_handler(error: Exception, error_map: Dict) -> None:
     """
     Handle errors according to a provided error mapping.
 
@@ -184,9 +181,7 @@ async def custom_error_handler(
 
 
 # Concurrency control utilities
-def max_concurrent(
-    func: Callable[..., T], limit: int
-) -> Callable[..., Callable[..., T]]:
+def max_concurrent(func: Callable, limit: int) -> Callable:
     """
     Limit the concurrency of function execution using a semaphore.
 
@@ -214,9 +209,7 @@ def max_concurrent(
     return wrapper
 
 
-def throttle(
-    func: Callable[..., T], period: float
-) -> Callable[..., Callable[..., T]]:
+def throttle(func: Callable, period: float) -> Callable:
     """
     Throttle function execution to limit the rate of calls.
 

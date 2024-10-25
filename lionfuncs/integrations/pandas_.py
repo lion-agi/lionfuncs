@@ -417,7 +417,7 @@ def _general_to_df(
 
 
 def extend_dataframe(
-    dataframes: Sequence[pd.DataFrame],
+    dataframes: Sequence,
     unique_col: str = "node_id",
     keep: Optional[Union[str, bool]] = "first",
     ignore_index: bool = False,

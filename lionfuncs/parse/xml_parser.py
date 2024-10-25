@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 from typing import Any
 from xml.etree import ElementTree as ET
@@ -9,7 +11,7 @@ def xml_to_dict(
     suppress=False,
     remove_root: bool = True,
     root_tag: str = None,
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """
     Parse an XML string into a nested dictionary structure.
 
@@ -60,11 +62,11 @@ class XMLParser:
         self.xml_string = xml_string.strip()
         self.index = 0
 
-    def parse(self) -> dict[str, Any]:
+    def parse(self) -> Dict[str, Any]:
         """Parse the XML string and return the root element as a dictionary."""
         return self._parse_element()
 
-    def _parse_element(self) -> dict[str, Any]:
+    def _parse_element(self) -> Dict[str, Any]:
         """Parse a single XML element and its children."""
         self._skip_whitespace()
         if self.xml_string[self.index] != "<":
@@ -97,7 +99,7 @@ class XMLParser:
             else:
                 text += self._parse_text()
 
-        result: dict[str, Any] = {}
+        result: Dict[str, Any] = {}
         if attributes:
             result["@attributes"] = attributes
         if children:

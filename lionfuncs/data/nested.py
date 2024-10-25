@@ -24,13 +24,13 @@ NestedStructure = Union[Dict[str, Any], List[Any]]
 
 
 def nmerge(
-    structures: Sequence[NestedStructure],
+    structures: Sequence,
     /,
     *,
     overwrite: bool = False,
     dict_sequence: bool = False,
     sort_list: bool = False,
-    custom_sort: Optional[Callable[[Any], Any]] = None,
+    custom_sort: Optional[Callable] = None,
 ) -> NestedStructure:
     """Merge multiple nested structures.
 
@@ -67,7 +67,7 @@ def nmerge(
 def npop(
     structure: NestedStructure,
     /,
-    indices: Union[str, int, Sequence[Union[str, int]]],
+    indices: Union[str, int, Sequence],
     default: Any = LN_UNDEFINED,
 ) -> Any:
     """Remove and return a value from a nested structure.
@@ -127,7 +127,7 @@ def npop(
 def nset(
     structure: NestedStructure,
     /,
-    indices: Union[str, int, Sequence[Union[str, int]]],
+    indices: Union[str, int, Sequence],
     value: Any,
 ) -> None:
     """Set a value within a nested structure.
@@ -340,7 +340,7 @@ def flatten(
 def nget(
     structure: NestedStructure,
     /,
-    indices: Union[str, int, Sequence[Union[str, int]]],
+    indices: Union[str, int, Sequence],
     default: Any = LN_UNDEFINED,
 ) -> Any:
     """Get a value from a nested structure.
@@ -415,7 +415,7 @@ def nget(
 def ndelete(
     structure: NestedStructure,
     /,
-    indices: Union[str, int, Sequence[Union[str, int]]],
+    indices: Union[str, int, Sequence],
     missing_ok: bool = False,
 ) -> None:
     """Delete a value from a nested structure.
@@ -449,8 +449,8 @@ def ncopy(
     source: NestedStructure,
     target: NestedStructure,
     /,
-    source_indices: Union[str, int, Sequence[Union[str, int]]],
-    target_indices: Union[str, int, Sequence[Union[str, int]]],
+    source_indices: Union[str, int, Sequence],
+    target_indices: Union[str, int, Sequence],
     *,
     missing_ok: bool = False,
 ) -> None:
@@ -491,8 +491,8 @@ def nmove(
     source: NestedStructure,
     target: NestedStructure,
     /,
-    source_indices: Union[str, int, Sequence[Union[str, int]]],
-    target_indices: Union[str, int, Sequence[Union[str, int]]],
+    source_indices: Union[str, int, Sequence],
+    target_indices: Union[str, int, Sequence],
     *,
     missing_ok: bool = False,
 ) -> None:
@@ -552,7 +552,7 @@ def _format_key(components: Tuple[Any, ...], sep: str) -> str:
 
 
 def _merge_dicts(
-    dicts: Sequence[Dict[str, Any]],
+    dicts: Sequence,
     overwrite: bool,
     use_sequence: bool,
 ) -> Dict[str, Any]:
@@ -591,9 +591,9 @@ def _merge_dicts(
 
 
 def _merge_sequences(
-    sequences: Sequence[List[Any]],
+    sequences: Sequence,
     sort_result: bool = False,
-    sort_key: Optional[Callable[[Any], Any]] = None,
+    sort_key: Optional[Callable] = None,
 ) -> List[Any]:
     """Merge multiple sequences."""
     result = list(chain(*sequences))
@@ -607,9 +607,9 @@ def _merge_sequences(
 
 
 def ninsert(
-    nested_structure: dict[Any, Any] | list[Any],
+    nested_structure: Union[Dict[Any, Any], List[Any]],
     /,
-    indices: list[str | int],
+    indices: List[Union[str, int]],
     value: Any,
     *,
     current_depth: int = 0,
@@ -706,6 +706,57 @@ def ninsert(
         nested_structure[last_part] = value
 
 
+def nfilter(
+    nested_structure: Union[Dict, List],
+    /,
+    condition: Callable,
+) -> Union[Dict, List]:
+    """Filter elements in a nested structure based on a condition.
+
+    Args:
+        nested_structure: The nested structure (dict or list) to filter.
+        condition: Function returning True for elements to keep, False to
+            discard.
+
+    Returns:
+        The filtered nested structure.
+
+    Raises:
+        TypeError: If nested_structure is not a dict or list.
+
+    Example:
+        >>> data = {"a": 1, "b": {"c": 2, "d": 3}, "e": [4, 5, 6]}
+        >>> nfilter(data, lambda x: isinstance(x, int) and x > 2)
+        {'b': {'d': 3}, 'e': [4, 5, 6]}
+    """
+    if isinstance(nested_structure, dict):
+        return _filter_dict(nested_structure, condition)
+    elif isinstance(nested_structure, list):
+        return _filter_list(nested_structure, condition)
+    else:
+        raise TypeError(
+            "The nested_structure must be either a dict or a list."
+        )
+
+
+def _filter_dict(
+    dictionary: Dict[Any, Any], condition: Callable
+) -> Dict[Any, Any]:
+    return {
+        k: nfilter(v, condition) if isinstance(v, (dict, list)) else v
+        for k, v in dictionary.items()
+        if condition(v) or isinstance(v, (dict, list))
+    }
+
+
+def _filter_list(lst: List[Any], condition: Callable) -> List[Any]:
+    return [
+        nfilter(item, condition) if isinstance(item, (dict, list)) else item
+        for item in lst
+        if condition(item) or isinstance(item, (dict, list))
+    ]
+
+
 __all__ = [
     "nmerge",
     "npop",
@@ -717,4 +768,5 @@ __all__ = [
     "ncopy",
     "nmove",
     "ninsert",
+    "nfilter",
 ]

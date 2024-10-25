@@ -23,10 +23,10 @@ HandleUnmatchedType = str  # "ignore", "raise", "remove", "fill", "force"
 
 def validate_mapping(
     d: Any,
-    keys: Union[Sequence[str], KeysDict],
+    keys: Union[Sequence, KeysDict],
     /,
     *,
-    similarity_algo: Union[str, Callable[[str, str], float]] = "jaro_winkler",
+    similarity_algo: Union[str, Callable] = "jaro_winkler",
     similarity_threshold: float = 0.85,
     fuzzy_match: bool = True,
     handle_unmatched: HandleUnmatchedType = "ignore",

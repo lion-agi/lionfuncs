@@ -6,6 +6,7 @@ __all__ = [
     "npop",
     "nset",
     "unflatten",
+    "nfilter",
     "flatten",
     "nget",
     "ndelete",

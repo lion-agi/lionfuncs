@@ -38,7 +38,7 @@ def to_dict(
     fuzzy_parse: bool = False,
     suppress: bool = False,
     str_type: Optional[str] = "json",
-    parser: Optional[Callable[[str], Dict[str, Any]]] = None,
+    parser: Optional[Callable] = None,
     recursive: bool = False,
     max_recursive_depth: Optional[int] = None,
     exclude_types: Tuple = (),
@@ -122,7 +122,7 @@ def _to_dict(
     use_model_dump: bool = True,
     fuzzy_parse: bool = False,
     str_type: Optional[str] = "json",
-    parser: Optional[Callable[[str], Dict[str, Any]]] = None,
+    parser: Optional[Callable] = None,
     exclude_types: Tuple = (),
     **kwargs: Any,
 ) -> Dict[str, Any]:
@@ -210,7 +210,7 @@ def _str_to_dict(
     /,
     *,
     str_type: Optional[str] = "json",
-    parser: Optional[Callable[[str], Dict[str, Any]]] = None,
+    parser: Optional[Callable] = None,
     **kwargs: Any,
 ) -> Dict[str, Any]:
     """Convert string to dictionary using specified parser."""

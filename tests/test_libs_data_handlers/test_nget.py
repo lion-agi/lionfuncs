@@ -1,6 +1,6 @@
 import pytest
 
-from lionfuncs.data.nget import nget
+from lionfuncs.data.nested import nget
 
 
 @pytest.mark.parametrize(

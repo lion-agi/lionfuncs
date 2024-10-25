@@ -185,8 +185,8 @@ def copy(obj: T, /, *, deep: bool = True, num: int = 1) -> Union[T, List[T]]:
 
 
 def run_pip_command(
-    args: Sequence[str],
-) -> subprocess.CompletedProcess[bytes]:
+    args: Sequence,
+) -> subprocess.CompletedProcess:
     """Run a pip command."""
     return subprocess.run(
         [sys.executable, "-m", "pip"] + list(args),

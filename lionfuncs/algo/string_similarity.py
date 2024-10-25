@@ -205,7 +205,7 @@ def levenshtein_similarity(s1: str, s2: str) -> float:
 
 
 # Map of available similarity algorithms
-SIMILARITY_ALGO_MAP: Dict[str, Callable[[str, str], float]] = {
+SIMILARITY_ALGO_MAP: Dict[str, Callable] = {
     "jaro_winkler": jaro_winkler_similarity,
     "levenshtein": levenshtein_similarity,
     "sequence_matcher": lambda s1, s2: SequenceMatcher(None, s1, s2).ratio(),
@@ -234,10 +234,8 @@ class MatchResult:
 
 def string_similarity(
     word: str,
-    correct_words: Sequence[str],
-    algorithm: Union[
-        SIMILARITY_TYPE, Callable[[str, str], float]
-    ] = "jaro_winkler",
+    correct_words: Sequence,
+    algorithm: Union[SIMILARITY_TYPE, Callable] = "jaro_winkler",
     threshold: float = 0.0,
     case_sensitive: bool = False,
     return_most_similar: bool = False,

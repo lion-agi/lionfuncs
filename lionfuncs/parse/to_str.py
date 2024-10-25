@@ -31,7 +31,7 @@ def to_str(
     str_type: Optional[str] = None,
     serialize_as: Optional[str] = None,
     use_model_dump: bool = False,
-    str_parser: Optional[Callable[[str], Dict[str, Any]]] = None,
+    str_parser: Optional[Callable] = None,
     parser_kwargs: Dict = {},
     **kwargs: Any,
 ) -> str:
@@ -128,7 +128,7 @@ def _serialize_as(
     chars: Optional[str] = None,
     str_type: Optional[str] = None,
     use_model_dump: bool = False,
-    str_parser: Optional[Callable[[str], Dict[str, Any]]] = None,
+    str_parser: Optional[Callable] = None,
     parser_kwargs: Dict = {},
     **kwargs: Any,
 ) -> str:
@@ -173,7 +173,7 @@ def strip_lower(
     str_type: Optional[str] = None,
     serialize_as: Optional[str] = None,
     use_model_dump: bool = False,
-    str_parser: Optional[Callable[[str], Dict[str, Any]]] = None,
+    str_parser: Optional[Callable] = None,
     parser_kwargs: Dict = {},
     **kwargs: Any,
 ) -> str:

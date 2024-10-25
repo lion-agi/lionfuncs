@@ -5,7 +5,7 @@ import pytest
 from pydantic import BaseModel
 
 # Import the functions to be tested
-from lionfuncs.data.to_dict import to_dict
+from lionfuncs.parse.to_dict import to_dict
 
 
 # Mock classes and functions for testing

@@ -158,7 +158,7 @@ def chunk_content(
 def chunk_content(
     content: str,
     chunk_by: Literal["tokens"],
-    tokenizer: Callable[[str], List[str]] = str.split,
+    tokenizer: Callable = str.split,
     chunk_size: int = 1024,
     overlap: float = 0,
     threshold: int = 128,
@@ -171,7 +171,7 @@ def chunk_content(
 def chunk_content(
     content: str,
     chunk_by: Literal["chars", "tokens"] = "chars",
-    tokenizer: Callable[[str], List[str]] = str.split,
+    tokenizer: Callable = str.split,
     chunk_size: int = 2048,
     overlap: float = 0,
     threshold: int = 256,

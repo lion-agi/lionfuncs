@@ -193,7 +193,7 @@ def validate_nested_structure(
 
 
 def validate_indices(
-    indices: Union[str, int, Sequence[Union[str, int]]],
+    indices: Union[str, int, Sequence],
     allow_empty: bool = False,
 ) -> List[Union[str, int]]:
     """Validate and normalize structure indices."""
