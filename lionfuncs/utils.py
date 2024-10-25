@@ -10,7 +10,7 @@ import sys
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from hashlib import sha256
-from typing import Literal, TypeVar
+from typing import Dict, List, Literal, Optional, Tuple, TypeVar, Union
 
 T = TypeVar("T")
 
@@ -23,8 +23,10 @@ def unique_hash(n: int = 32) -> str:
 
 
 def is_same_dtype(
-    input_: list | dict, dtype: type | None = None, return_dtype: bool = False
-) -> bool | tuple[bool, type]:
+    input_: Union[List, Dict],
+    dtype: Optional[type] = None,
+    return_dtype: bool = False,
+) -> Union[bool, Tuple[bool, type]]:
     """Check if all elements in input have the same data type."""
     if not input_:
         return True if not return_dtype else (True, None)
@@ -40,8 +42,8 @@ def is_same_dtype(
 def insert_random_hyphens(
     s: str,
     num_hyphens: int = 1,
-    start_index: int | None = None,
-    end_index: int | None = None,
+    start_index: Optional[int] = None,
+    end_index: Optional[int] = None,
 ) -> str:
     """Insert random hyphens into a string."""
     if len(s) < 2:
@@ -105,11 +107,11 @@ def time(
     *,
     tz: timezone = timezone.utc,
     type_: Literal["timestamp", "datetime", "iso", "custom"] = "timestamp",
-    sep: str | None = "T",
-    timespec: str | None = "auto",
-    custom_format: str | None = None,
-    custom_sep: str | None = None,
-) -> float | str | datetime:
+    sep: Optional[str] = "T",
+    timespec: Optional[str] = "auto",
+    custom_format: Optional[str] = None,
+    custom_sep: Optional[str] = None,
+) -> Union[float, str, datetime]:
     """
     Get current time in various formats.
 
@@ -133,37 +135,33 @@ def time(
     """
     now = datetime.now(tz=tz)
 
-    match type_:
-        case "iso":
-            return now.isoformat(sep=sep, timespec=timespec)
+    if type_ == "iso":
+        return now.isoformat(sep=sep, timespec=timespec)
 
-        case "timestamp":
-            return now.timestamp()
+    if type_ == "timestamp":
+        return now.timestamp()
 
-        case "datetime":
-            return now
+    if type_ == "datetime":
+        return now
 
-        case "custom":
-            if not custom_format:
-                raise ValueError(
-                    "custom_format must be provided when type_='custom'"
-                )
-            formatted_time = now.strftime(custom_format)
-            if custom_sep is not None:
-                for old_sep in ("-", ":", "."):
-                    formatted_time = formatted_time.replace(
-                        old_sep, custom_sep
-                    )
-            return formatted_time
-
-        case _:
+    if type_ == "custom":
+        if not custom_format:
             raise ValueError(
-                f"Invalid value <{type_}> for `type_`, must be"
-                " one of 'timestamp', 'datetime', 'iso', or 'custom'."
+                "custom_format must be provided when type_='custom'"
             )
+        formatted_time = now.strftime(custom_format)
+        if custom_sep is not None:
+            for old_sep in ("-", ":", "."):
+                formatted_time = formatted_time.replace(old_sep, custom_sep)
+        return formatted_time
+
+    raise ValueError(
+        f"Invalid value <{type_}> for `type_`, must be"
+        " one of 'timestamp', 'datetime', 'iso', or 'custom'."
+    )
 
 
-def copy(obj: T, /, *, deep: bool = True, num: int = 1) -> T | list[T]:
+def copy(obj: T, /, *, deep: bool = True, num: int = 1) -> Union[T, List[T]]:
     """
     Create one or more copies of an object.
 
@@ -187,8 +185,8 @@ def copy(obj: T, /, *, deep: bool = True, num: int = 1) -> T | list[T]:
 
 
 def run_pip_command(
-    args: Sequence[str],
-) -> subprocess.CompletedProcess[bytes]:
+    args: Sequence,
+) -> subprocess.CompletedProcess:
     """Run a pip command."""
     return subprocess.run(
         [sys.executable, "-m", "pip"] + list(args),
@@ -202,8 +200,8 @@ def format_deprecation_msg(
     type_: str,
     deprecated_version: str,
     removal_version: str,
-    replacement: str | Literal["python"] | None = None,
-    additional_msg: str | None = None,
+    replacement: Optional[Union[str, Literal["python"]]] = None,
+    additional_msg: Optional[str] = None,
 ) -> None:
 
     msg = (
@@ -221,7 +219,7 @@ def format_deprecation_msg(
     return msg
 
 
-def get_bins(input_: list[str], upper: int) -> list[list[int]]:
+def get_bins(input_: List[str], upper: int) -> List[List[int]]:
     """Organizes indices of strings into bins based on a cumulative upper limit.
 
     Args:
@@ -229,7 +227,8 @@ def get_bins(input_: list[str], upper: int) -> list[list[int]]:
         upper (int): The cumulative length upper limit for each bin.
 
     Returns:
-        List[List[int]]: A list of bins, each bin is a list of indices from the input list.
+        List[List[int]]: A list of bins, each bin is a list of indices from
+        the input list.
     """
     current = 0
     bins = []

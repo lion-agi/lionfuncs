@@ -3,7 +3,7 @@ import unittest
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
-from lionfuncs.func.lcall import alcall
+from lionfuncs.func.call_ import alcall
 
 
 async def mock_func(x: int, add: int = 0) -> int:

@@ -1,6 +1,6 @@
 import pytest
 
-from lionfuncs.data.ninsert import ninsert
+from lionfuncs.data.nested import ninsert
 
 
 @pytest.mark.parametrize(

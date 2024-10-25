@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import pytest
 
-from lionfuncs.func.ucall import ucall
+from lionfuncs.func.call_ import ucall
 
 
 async def async_func(x: int) -> int:

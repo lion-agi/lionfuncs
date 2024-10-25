@@ -1,96 +1,155 @@
 import json
+import logging
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Dict, List, Optional, Union
 
-from lionfuncs.file.chunk_content import chunk_content
-from lionfuncs.file.create_path import create_path
-from lionfuncs.file.save_to_file import save_to_file
+from .chunk_ import chunk_content
 
 
 def file_to_chunks(
-    file_path: str | Path,
-    chunk_func: Callable[[str, int, float, int], list[str]],
+    file_path: Union[str, Path],
+    *,
     chunk_size: int = 1500,
     overlap: float = 0.1,
     threshold: int = 200,
     encoding: str = "utf-8",
-    custom_metadata: dict[str, Any] | None = None,
-    output_dir: str | Path | None = None,
+    chunk_by: str = "chars",
+    tokenizer: Optional[Callable] = None,
+    custom_metadata: Optional[Dict[str, Any]] = None,
+    output_dir: Optional[Union[str, Path]] = None,
     verbose: bool = False,
     timestamp: bool = True,
     random_hash_digits: int = 4,
-) -> list[dict[str, Any]]:
-    """
-    Process a file and split its content into chunks.
+) -> List[Dict[str, Any]]:
+    """Process file content into chunks with metadata.
 
-    This function reads a file, splits its content into chunks using the provided
-    chunking function, and optionally saves the chunks to separate files.
+    Reads a file, splits its content into chunks, and optionally saves
+    chunks to separate files with metadata.
 
     Args:
-        file_path (Union[str, Path]): Path to the file to be processed.
-        chunk_func (Callable): Function to use for chunking the content.
-        chunk_size (int): The target size for each chunk.
-        overlap (float): The fraction of overlap between chunks.
-        threshold (int): The minimum size for the last chunk.
-        encoding (str): File encoding to use when reading the file.
-        custom_metadata (Optional[Dict[str, Any]]): Additional metadata to include with each chunk.
-        output_dir (Optional[Union[str, Path]]): Directory to save output chunks (if provided).
-        verbose (bool): If True, print verbose output.
-        timestamp (bool): If True, include timestamp in output filenames.
-        random_hash_digits (int): Number of random hash digits to include in output filenames.
+        file_path: Path to input file.
+        chunk_size: Target chunk size.
+        overlap: Overlap fraction between chunks.
+        threshold: Minimum chunk size.
+        encoding: File encoding.
+        chunk_by: Chunking method ("chars" or "tokens").
+        tokenizer: Custom tokenizer function.
+        custom_metadata: Additional metadata for chunks.
+        output_dir: Directory to save chunk files.
+        verbose: Enable detailed logging.
+        timestamp: Add timestamps to output files.
+        random_hash_digits: Add random hash to output files.
 
     Returns:
-        List[Dict[str, Any]]: A list of dictionaries, each representing a chunk with metadata.
+        List of chunk dictionaries with metadata.
 
     Raises:
-        ValueError: If there's an error processing the file.
+        ValueError: Invalid file or processing error.
+        FileNotFoundError: Input file not found.
+        UnicodeError: Encoding error.
+
+    Examples:
+        >>> chunks = file_to_chunks('doc.txt', chunk_size=1000)
+        >>> print(f"Split into {len(chunks)} chunks")
     """
     try:
         file_path = Path(file_path)
-        with open(file_path, "r", encoding=encoding) as f:
-            content = f.read()
+        if not file_path.is_file():
+            raise FileNotFoundError(f"File not found: {file_path}")
 
+        if verbose:
+            logging.info(f"Processing file: {file_path}")
+
+        # Read file content
+        try:
+            with open(file_path, "r", encoding=encoding) as f:
+                content = f.read()
+        except UnicodeError as e:
+            raise UnicodeError(f"Error reading {file_path}: {e}")
+
+        # Prepare metadata
         metadata = {
-            "file_path": str(file_path),
+            "source_file": str(file_path),
             "file_name": file_path.name,
             "file_size": file_path.stat().st_size,
             **(custom_metadata or {}),
         }
 
+        # Create chunks
         chunks = chunk_content(
-            content, chunk_func, chunk_size, overlap, threshold, metadata
+            content=content,
+            chunk_by=chunk_by,
+            tokenizer=tokenizer or str.split,
+            chunk_size=chunk_size,
+            overlap=overlap,
+            threshold=threshold,
+            metadata=metadata,
         )
 
+        if verbose:
+            logging.info(f"Created {len(chunks)} chunks from {file_path}")
+
+        # Save chunks if output directory specified
         if output_dir:
             save_chunks(
-                chunks, output_dir, verbose, timestamp, random_hash_digits
+                chunks=chunks,
+                output_dir=output_dir,
+                verbose=verbose,
+                timestamp=timestamp,
+                random_hash_digits=random_hash_digits,
             )
 
         return chunks
+
     except Exception as e:
-        raise ValueError(f"Error processing file {file_path}: {e}") from e
+        raise ValueError(f"Error processing {file_path}: {e}")
 
 
 def save_chunks(
-    chunks: list[dict[str, Any]],
-    output_dir: str | Path,
-    verbose: bool,
-    timestamp: bool,
-    random_hash_digits: int,
+    chunks: List[Dict[str, Any]],
+    output_dir: Union[str, Path],
+    verbose: bool = False,
+    timestamp: bool = True,
+    random_hash_digits: int = 4,
 ) -> None:
-    """Helper function to save chunks to files."""
-    output_path = Path(output_dir)
-    for i, chunk in enumerate(chunks):
-        file_path = create_path(
-            directory=output_path,
-            filename=f"chunk_{i+1}",
-            extension="json",
-            timestamp=timestamp,
-            random_hash_digits=random_hash_digits,
-        )
-        save_to_file(
-            json.dumps(chunk, ensure_ascii=False, indent=2),
-            directory=file_path.parent,
-            filename=file_path.name,
-            verbose=verbose,
-        )
+    """Save chunks to individual files.
+
+    Helper function to save chunk dictionaries as JSON files.
+
+    Args:
+        chunks: List of chunk dictionaries.
+        output_dir: Output directory.
+        verbose: Enable detailed logging.
+        timestamp: Add timestamps to filenames.
+        random_hash_digits: Add random hash to filenames.
+
+    Raises:
+        ValueError: Error saving chunks.
+    """
+    from .path_ import create_path
+
+    output_dir = Path(output_dir)
+    try:
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        for i, chunk in enumerate(chunks, 1):
+            try:
+                file_path = create_path(
+                    directory=output_dir,
+                    filename=f"chunk_{i}",
+                    extension="json",
+                    timestamp=timestamp,
+                    random_hash_digits=random_hash_digits,
+                )
+
+                with open(file_path, "w", encoding="utf-8") as f:
+                    json.dump(chunk, f, ensure_ascii=False, indent=2)
+
+                if verbose:
+                    logging.info(f"Saved chunk {i} to {file_path}")
+
+            except Exception as e:
+                raise ValueError(f"Error saving chunk {i}: {e}")
+
+    except Exception as e:
+        raise ValueError(f"Error saving chunks to {output_dir}: {e}")
